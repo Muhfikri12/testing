@@ -40,6 +40,7 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 	// Menambahkan endpoint ke router
 	r.Route("/api", func(api chi.Router) {
 		api.Get("/products", handler.ProductHandler.GetAll)
+		api.Get("/products/best_selling", handler.ProductHandler.GetAllBestSelling)
 	})
 
 	return r, logger, nil
