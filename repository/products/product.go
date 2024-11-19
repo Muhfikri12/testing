@@ -19,10 +19,10 @@ func NewProductRepository(db *sql.DB, Log *zap.Logger) ProductRepository {
 	}
 }
 
-func (p *ProductRepository) ShowAllProducts(limit, page int) (*[]model.Products, int, error) {
+func (p *ProductRepository) ShowAllProducts(limit, page int, category, name string) (*[]model.Products, int, error) {
 	offset := (page - 1) * limit
 
-	query := `SELECT p.id, p.name, p.image_url, p.price, p.discount, p.description, p.created_at, p.updated_at, ca.name
+	query := `SELECT p.id, p.name, p.image_url, p.price, p.discount, p.description, p.created_at, p.updated_at, ca.name,
 		ROUND(COALESCE((
 			SELECT AVG(pr.rating)::numeric
 			FROM previews pr
@@ -53,10 +53,13 @@ func (p *ProductRepository) ShowAllProducts(limit, page int) (*[]model.Products,
 			AND pv.deleted_at IS NULL
 		) AS INTEGER) AS total_buyers
 		FROM products p
+		JOIN categories ca ON p.category_id = ca.id
 		WHERE p.deleted_at IS NULL 
-		LIMIT $1 OFFSET $2`
+			AND (ca.name = $1 OR $1 = '') 
+			AND (p.name ILIKE '%' || $2 || '%' OR $2 = '')
+		LIMIT $3 OFFSET $4`
 
-	rows, err := p.DB.Query(query, limit, offset)
+	rows, err := p.DB.Query(query, category, name, limit, offset)
 	if err != nil {
 		p.Logger.Error("Error from repository: " + err.Error())
 		return nil, 0, err
@@ -70,8 +73,10 @@ func (p *ProductRepository) ShowAllProducts(limit, page int) (*[]model.Products,
 			Timestamps: &model.Basic{},
 			Previews:   &model.Previews{},
 			Checkouts:  &model.Checkouts{},
+			Categories: &model.Categories{},
 		}
-		if err := rows.Scan(&product.ID, &product.Name, &product.ImageUrl, &product.Price, &product.Discount, &product.Description, &product.Timestamps.Created_at, &product.Timestamps.Updated_at, &product.Previews.Rating, &product.Previews.TotalReviewers, &product.Checkouts.TotalBuyers); err != nil {
+
+		if err := rows.Scan(&product.ID, &product.Name, &product.ImageUrl, &product.Price, &product.Discount, &product.Description, &product.Timestamps.Created_at, &product.Timestamps.Updated_at, &product.Categories.Name, &product.Previews.Rating, &product.Previews.TotalReviewers, &product.Checkouts.TotalBuyers); err != nil {
 			p.Logger.Error("Error from repository: " + err.Error())
 			return nil, 0, err
 		}
@@ -82,10 +87,13 @@ func (p *ProductRepository) ShowAllProducts(limit, page int) (*[]model.Products,
 	var totalData int
 
 	countQuery := `SELECT COUNT(*) 
-				FROM products 
-				WHERE deleted_at IS NULL`
+				FROM products p
+				JOIN categories ca ON p.category_id = ca.id
+				WHERE p.deleted_at IS NULL 
+                 AND (ca.name = $1 OR $1 = '') 
+                 AND (p.name ILIKE '%' || $2 || '%' OR $2 = '')`
 
-	err = p.DB.QueryRow(countQuery).Scan(&totalData)
+	err = p.DB.QueryRow(countQuery, category, name).Scan(&totalData)
 	if err != nil {
 		p.Logger.Error("event repository: failed to fetch total count", zap.Error(err))
 		return nil, 0, err

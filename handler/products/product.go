@@ -27,6 +27,8 @@ func NewProductsHandler(service service.AllService, log *zap.Logger, config util
 func (ph *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 
 	pageStr := r.URL.Query().Get("page")
+	category := r.URL.Query().Get("category")
+	name := r.URL.Query().Get("name")
 
 	page, _ := strconv.Atoi(pageStr)
 
@@ -34,7 +36,7 @@ func (ph *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		page = 1
 	}
 
-	products, totalData, totalPage, err := ph.Service.ProductService.GetAll(page)
+	products, totalData, totalPage, err := ph.Service.ProductService.GetAll(page, category, name)
 	if err != nil {
 		ph.Log.Error("Error Handler Product: " + err.Error())
 		helper.Responses(w, http.StatusNotFound, "Data tidak tersedia", nil)

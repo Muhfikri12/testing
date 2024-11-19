@@ -22,12 +22,19 @@ func NewProductsService(repo repository.AllRepository, Log *zap.Logger) Products
 	}
 }
 
-func (ps *ProductsService) GetAll(page int) (*[]model.Products, int, int, error) {
+func (ps *ProductsService) GetAll(page int, category, name string) (*[]model.Products, int, int, error) {
 	limit := 10
 
 	thirtyDaysAgo := time.Now().AddDate(0, 0, 30)
 
-	products, totalData, err := ps.Repo.ProductsRepo.ShowAllProducts(limit, page)
+	if category == "" {
+		category = ""
+	}
+	if name == "" {
+		name = ""
+	}
+
+	products, totalData, err := ps.Repo.ProductsRepo.ShowAllProducts(limit, page, category, name)
 	if err != nil {
 		ps.Logger.Error("Error from Service: " + err.Error())
 		return nil, 0, 0, err
