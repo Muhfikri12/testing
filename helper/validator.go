@@ -9,7 +9,7 @@ import (
 var validate *validator.Validate
 
 // validator inline message
-func ValidateInput(data interface{}) (string, error) {
+func ValidateInput(data any) (string, error) {
 	// Create new validation and check the struct
 	validate = validator.New()
 	err := validate.Struct(data)
@@ -110,7 +110,9 @@ func ValidateInputGeneric[T any](data T) ([]FieldError, error) {
 		// Customize messages based on tag
 		switch err.Tag() {
 		case "required":
-			message = fmt.Sprintf("%s is required", err.Field())
+			if err.Value() == nil || err.Value() == "" || err.Value() == 0 {
+				message = fmt.Sprintf("%s is required", err.Field())
+			}
 		case "email":
 			message = "Please enter a valid email format"
 		case "gte":

@@ -32,7 +32,6 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 		return nil, logger, err
 	}
 
-	// Inisialisasi repository, service, dan handler
 	repo := repository.NewAllRepository(db, logger)
 	service := service.NewAllService(repo, logger)
 	handler := handler.NewAllHandler(service, logger, config)
@@ -41,6 +40,11 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 	r.Route("/api", func(api chi.Router) {
 		api.Get("/products", handler.ProductHandler.GetAll)
 		api.Get("/products/best_selling", handler.ProductHandler.GetAllBestSelling)
+		api.Post("/wishlist", handler.ProductHandler.CreateWishlist)
+		api.Delete("/wishlist/{id}", handler.ProductHandler.DeleteWishlist)
+		api.Get("/carts/total_products", handler.ProductHandler.AllProductsCart)
+		api.Get("/categories", handler.CategoryHandler.GetAllCategories)
+
 	})
 
 	return r, logger, nil

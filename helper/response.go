@@ -6,12 +6,12 @@ import (
 )
 
 type Response struct {
-	Status    int
-	Message   string
-	Page      int
-	Limit     int
-	TotalPage int
-	TotalData int
+	Status    int    `json:"status,omitempty"`
+	Message   string `json:"message,omitempty"`
+	Page      int    `json:"page,omitempty"`
+	Limit     int    `json:"limit,omitempty"`
+	TotalPage int    `json:"total_page,omitempty"`
+	TotalData int    `json:"total_data,omitempty"`
 	Data      interface{}
 }
 
@@ -22,8 +22,8 @@ func Responses(w http.ResponseWriter, code int, message string, data any) {
 		Data:    data,
 	}
 
-	w.WriteHeader(code)
 	w.Header().Set("content-type", "application/json")
+	w.WriteHeader(code)
 	json.NewEncoder(w).Encode(response)
 }
 
