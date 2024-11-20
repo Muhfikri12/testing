@@ -1,6 +1,6 @@
-{"L":"INFO","T":"2024-11-20T21:51:59.263+0700","M":"Starting server","port":"8000"}
-{"L":"ERROR","T":"2024-11-20T21:53:05.493+0700","M":"Error from register repository: pq: duplicate key value violates unique constraint \"users_email_key\""}
-{"L":"ERROR","T":"2024-11-20T21:53:05.494+0700","M":"Error from Register Service: pq: duplicate key value violates unique constraint \"users_email_key\""}
-{"L":"ERROR","T":"2024-11-20T21:53:05.494+0700","M":"Failed to Register: pq: duplicate key value violates unique constraint \"users_email_key\""}
-{"L":"INFO","T":"2024-11-20T21:53:05.494+0700","M":"http request","url":"/api/register","duration":"28.462577ms"}
-{"L":"INFO","T":"2024-11-20T21:53:39.641+0700","M":"http request","url":"/api/register","duration":"1.572907ms"}
+{"L":"INFO","T":"2024-11-20T22:33:28.501+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-20T22:33:55.716+0700","M":"http request","url":"/api/register","duration":"748.913µs"}
+{"L":"INFO","T":"2024-11-20T22:34:05.593+0700","M":"http request","url":"/api/register","duration":"370.543µs"}
+{"L":"INFO","T":"2024-11-20T22:34:29.466+0700","M":"http request","url":"/api/register","duration":"185.713µs"}
+{"L":"INFO","T":"2024-11-20T22:34:55.241+0700","M":"http request","url":"/api/register","duration":"286.695µs"}
+{"L":"INFO","T":"2024-11-20T22:35:05.189+0700","M":"http request","url":"/api/register","duration":"225.629µs"}

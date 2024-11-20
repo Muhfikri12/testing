@@ -21,7 +21,5 @@ func (u *UsersRepository) Register(user *model.Users) error {
 		return err
 	}
 
-	user.Password = ""
-
 	return nil
 }
