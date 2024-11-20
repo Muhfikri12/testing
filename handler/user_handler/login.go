@@ -35,7 +35,7 @@ func (l *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := l.Service.AuthService.Login(&user)
+	err := l.Service.UserService.Login(&user)
 	if err != nil {
 		l.Log.Error("Failed to login: " + err.Error())
 		helper.Responses(w, http.StatusInternalServerError, "Failed to login: "+err.Error(), nil)
@@ -43,5 +43,4 @@ func (l *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	helper.Responses(w, http.StatusOK, "Successfully Login ", user)
-
 }

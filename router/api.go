@@ -52,6 +52,7 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 		})
 
 		api.Post("/login", handler.UserHandler.Login)
+		api.Post("/register", handler.UserHandler.Register)
 		api.Get("/categories", handler.CategoryHandler.GetAllCategories)
 		api.Get("/banners", handler.PromotionHandler.GetAllBanners)
 		api.Get("/promo", handler.PromotionHandler.GetAllPromo)
