@@ -6,13 +6,13 @@ import (
 )
 
 type Response struct {
-	Status    int    `json:"status,omitempty"`
-	Message   string `json:"message,omitempty"`
-	Page      int    `json:"page,omitempty"`
-	Limit     int    `json:"limit,omitempty"`
-	TotalPage int    `json:"total_page,omitempty"`
-	TotalData int    `json:"total_data,omitempty"`
-	Data      interface{}
+	Status    int         `json:"status,omitempty"`
+	Message   string      `json:"message,omitempty"`
+	Page      int         `json:"page,omitempty"`
+	Limit     int         `json:"limit,omitempty"`
+	TotalPage int         `json:"total_page,omitempty"`
+	TotalData int         `json:"total_data,omitempty"`
+	Data      interface{} `json:"data,omitempty"`
 }
 
 func Responses(w http.ResponseWriter, code int, message string, data any) {

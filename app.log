@@ -1,1 +1,12 @@
-{"L":"INFO","T":"2024-11-20T16:43:51.435+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-20T20:03:11.694+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-20T20:03:21.728+0700","M":"http request","url":"/api/wishlists","duration":"72.593µs"}
+{"L":"INFO","T":"2024-11-20T20:03:44.504+0700","M":"http request","url":"/api/wishlists","duration":"40.094µs"}
+{"L":"INFO","T":"2024-11-20T20:03:50.651+0700","M":"http request","url":"/api/login","duration":"11.529506ms"}
+{"L":"INFO","T":"2024-11-20T20:06:14.163+0700","M":"http request","url":"/api/login","duration":"2.624294ms"}
+{"L":"INFO","T":"2024-11-20T20:06:45.442+0700","M":"http request","url":"/api/wishlists","duration":"23.082µs"}
+{"L":"INFO","T":"2024-11-20T20:08:12.017+0700","M":"http request","url":"/api/login","duration":"1.397749ms"}
+{"L":"INFO","T":"2024-11-20T20:09:39.564+0700","M":"http request","url":"/api/wishlists","duration":"56.316µs"}
+{"L":"INFO","T":"2024-11-20T20:09:48.646+0700","M":"http request","url":"/api/wishlists","duration":"18.494µs"}
+{"L":"INFO","T":"2024-11-20T20:11:12.714+0700","M":"http request","url":"/api/wishlists","duration":"23.186189ms"}
+{"L":"INFO","T":"2024-11-20T20:11:58.887+0700","M":"http request","url":"/api/wishlist/8","duration":"9.561µs"}
+{"L":"INFO","T":"2024-11-20T20:12:13.201+0700","M":"http request","url":"/api/wishlists/16","duration":"16.991675ms"}

@@ -3,6 +3,7 @@ package router
 import (
 	"ecommers/database"
 	"ecommers/handler"
+	"ecommers/middleware"
 	"ecommers/repository"
 	"ecommers/service"
 	"ecommers/util"
@@ -12,25 +13,23 @@ import (
 )
 
 func InitRouter() (*chi.Mux, *zap.Logger, error) {
-	// Inisialisasi router
 	r := chi.NewRouter()
 
-	// Inisialisasi logger
 	logger := util.InitLog()
 
-	// Membaca konfigurasi
 	config, err := util.ReadConfiguration()
 	if err != nil {
 		logger.Error("Failed to read configuration", zap.Error(err))
 		return nil, logger, err
 	}
 
-	// Inisialisasi database
 	db, err := database.InitDB(config)
 	if err != nil {
 		logger.Error("Failed to initialize database", zap.Error(err))
 		return nil, logger, err
 	}
+
+	md := middleware.NewMiddleware(logger)
 
 	repo := repository.NewAllRepository(db, logger)
 	service := service.NewAllService(repo, logger)
@@ -38,11 +37,21 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 
 	// Menambahkan endpoint ke router
 	r.Route("/api", func(api chi.Router) {
-		api.Get("/products", handler.ProductHandler.GetAll)
-		api.Get("/products/best_selling", handler.ProductHandler.GetAllBestSelling)
-		api.Post("/wishlist", handler.ProductHandler.CreateWishlist)
-		api.Delete("/wishlist/{id}", handler.ProductHandler.DeleteWishlist)
-		api.Get("/carts/total_products", handler.ProductHandler.AllProductsCart)
+
+		api.Use(md.MinddlewareLogger)
+		api.Route("/products", func(r chi.Router) {
+			r.Get("/", handler.ProductHandler.GetAll)
+			r.Get("/best_selling", handler.ProductHandler.GetAllBestSelling)
+			r.Get("/carts/total_products", handler.ProductHandler.AllProductsCart)
+		})
+
+		api.Route("/wishlists", func(r chi.Router) {
+			r.Use(middleware.AuthenticateToken)
+			r.Post("/", handler.ProductHandler.CreateWishlist)
+			r.Delete("/{id}", handler.ProductHandler.DeleteWishlist)
+		})
+
+		api.Post("/login", handler.UserHandler.Login)
 		api.Get("/categories", handler.CategoryHandler.GetAllCategories)
 		api.Get("/banners", handler.PromotionHandler.GetAllBanners)
 		api.Get("/promo", handler.PromotionHandler.GetAllPromo)
