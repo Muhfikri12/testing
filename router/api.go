@@ -44,6 +44,7 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 		api.Delete("/wishlist/{id}", handler.ProductHandler.DeleteWishlist)
 		api.Get("/carts/total_products", handler.ProductHandler.AllProductsCart)
 		api.Get("/categories", handler.CategoryHandler.GetAllCategories)
+		api.Get("/banners", handler.PromotionHandler.GetAllBanners)
 
 	})
 
