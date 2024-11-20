@@ -19,13 +19,13 @@ func NewPromotionsRepository(db *sql.DB, Log *zap.Logger) PromotionsRepository {
 	}
 }
 
-func (p *PromotionsRepository) GetAllBanner() (*[]model.Promotions, error) {
+func (p *PromotionsRepository) GetAllCampaign(status bool) (*[]model.Promotions, error) {
 
 	query := `SELECT id, title, subtitle, image_url, path_url, start_date, end_date
-		FROM promotions WHERE deleted_at IS NULL AND is_promo = false
-		ORDER BY start_date ASC`
+		FROM promotions WHERE deleted_at IS NULL AND is_promo = $1
+		ORDER BY start_date ASC `
 
-	rows, err := p.DB.Query(query)
+	rows, err := p.DB.Query(query, status)
 	if err != nil {
 		p.Logger.Error("Error from query banner repository: " + err.Error())
 		return nil, err

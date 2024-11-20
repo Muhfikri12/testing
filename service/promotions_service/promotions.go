@@ -20,11 +20,12 @@ func NewPromotionsService(repo repository.AllRepository, log *zap.Logger) Promot
 	}
 }
 
-func (b *PromotionsService) GetallBanners() (*[]model.Promotions, error) {
+func (b *PromotionsService) GetallCampaign(status bool, days int) (*[]model.Promotions, error) {
 
 	today := time.Now()
+	end := time.Now().AddDate(0, 0, days)
 
-	banners, err := b.Repo.PromotionRepo.GetAllBanner()
+	banners, err := b.Repo.PromotionRepo.GetAllCampaign(status)
 	if err != nil {
 		b.Log.Error("Error fetch banner Service: " + err.Error())
 		return nil, err
@@ -33,22 +34,10 @@ func (b *PromotionsService) GetallBanners() (*[]model.Promotions, error) {
 	bannersArr := []model.Promotions{}
 
 	for _, banner := range *banners {
-		if !banner.StartDate.Before(today) { // Hanya banner dengan start_date hari ini atau lebih
+		if banner.StartDate.Before(end) && banner.EndDate.After(today) {
 			bannersArr = append(bannersArr, banner)
 		}
 	}
 
 	return &bannersArr, nil
 }
-
-// func (b *PromotionsService) GetallBanners() (*[]model.Promotions, error) {
-//
-// 	banners, err := b.Repo.PromotionRepo.GetAllBanner()
-// 	if err != nil {
-// 		b.Log.Error("Error fatch banner Service: " + err.Error())
-// 		return nil, err
-// 	}
-//
-// 	return banners, nil
-//
-// }
