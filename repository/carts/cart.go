@@ -47,3 +47,37 @@ func (c *CartsRepository) TotalCarts(token string) (*[]model.Cart, error) {
 
 	return &carts, nil
 }
+
+func (c *CartsRepository) GetDetailCart(token string) (*[]model.Products, error) {
+
+	carts := []model.Products{}
+
+	query := `SELECT p.name, p.image_url, p.price, p.discount, SUM(c.qty) FROM shopping_carts c
+		JOIN product_varians pv ON c.product_variant_id = pv.id
+		JOIN products p ON pv.product_id = p.id
+		JOIN users u ON c.user_id = u.id
+		WHERE pv.product_id = p.id AND u.token = $1
+		GROUP BY p.name, p.image_url, p.price, p.discount`
+
+	rows, err := c.DB.Query(query, token)
+	if err != nil {
+		c.Logger.Error("Error from query GetDetailCart: " + err.Error())
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		cart := model.Products{}
+		if err := rows.Scan(&cart.Name, &cart.ImageUrl, &cart.Price, &cart.Discount, &cart.Qty); err != nil {
+			c.Logger.Error("Error from scan GetDetailCart: " + err.Error())
+			return nil, err
+		}
+		cart.PriceAfterDiscount = cart.Price - (cart.Price * cart.Discount / 100)
+		cart.Price = 0
+		cart.Discount = 0
+
+		carts = append(carts, cart)
+	}
+
+	return &carts, nil
+}

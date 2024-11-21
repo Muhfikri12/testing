@@ -36,3 +36,17 @@ func (ch *CartsHandler) AllProductsCart(w http.ResponseWriter, r *http.Request) 
 
 	helper.Responses(w, http.StatusOK, "Succesfully", carts)
 }
+
+func (ch *CartsHandler) GetDetailCart(w http.ResponseWriter, r *http.Request) {
+
+	token := r.Header.Get("Authorization")
+
+	carts, err := ch.Service.CartService.GetDetailCart(token)
+	if err != nil {
+		ch.Log.Error("Product not found: " + err.Error())
+		helper.Responses(w, http.StatusNotFound, "Product not found: "+err.Error(), nil)
+		return
+	}
+
+	helper.Responses(w, http.StatusOK, "Succesfully", carts)
+}

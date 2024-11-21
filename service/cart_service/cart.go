@@ -29,3 +29,13 @@ func (cs *CartsService) TotalProducts(token string) (*[]model.Cart, error) {
 
 	return carts, nil
 }
+
+func (cs *CartsService) GetDetailCart(token string) (*[]model.Products, error) {
+	products, err := cs.Repo.CartRepo.GetDetailCart(token)
+	if err != nil {
+		cs.Logger.Error("Error from service: " + err.Error())
+		return nil, err
+	}
+
+	return products, nil
+}

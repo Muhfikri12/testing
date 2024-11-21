@@ -1,2 +1,2 @@
-{"L":"INFO","T":"2024-11-21T13:31:57.925+0700","M":"Starting server","port":"8000"}
-{"L":"INFO","T":"2024-11-21T13:32:00.055+0700","M":"http request","url":"/api/product/1","duration":"13.304738ms"}
+{"L":"INFO","T":"2024-11-21T23:15:59.846+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-21T23:16:03.593+0700","M":"http request","url":"/api/users","duration":"19.057135ms"}

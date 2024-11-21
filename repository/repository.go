@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"ecommers/repository/carts"
 	"ecommers/repository/category"
+	"ecommers/repository/checkout"
 	"ecommers/repository/products"
 	"ecommers/repository/promotions"
 	"ecommers/repository/users"
@@ -17,6 +18,7 @@ type AllRepository struct {
 	PromotionRepo promotions.PromotionsRepository
 	UsersRepo     users.UsersRepository
 	CartRepo      carts.CartsRepository
+	CheckoutRepo  checkout.CheckoutsRepository
 }
 
 func NewAllRepository(db *sql.DB, log *zap.Logger) AllRepository {
@@ -26,5 +28,6 @@ func NewAllRepository(db *sql.DB, log *zap.Logger) AllRepository {
 		PromotionRepo: promotions.NewPromotionsRepository(db, log),
 		UsersRepo:     users.NewUsersRepository(db, log),
 		CartRepo:      carts.NewCartsRepository(db, log),
+		CheckoutRepo:  checkout.NewCheckoutsRepository(db, log),
 	}
 }

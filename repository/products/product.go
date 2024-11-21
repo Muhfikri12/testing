@@ -27,23 +27,25 @@ func (p *ProductRepository) ShowAllProducts(limit, page int, category, name stri
 			SELECT AVG(pr.rating)::numeric
 			FROM previews pr
 			JOIN checkout_items ci ON pr.checkout_item_id = ci.id
-			WHERE ci.product_id = p.id
+			JOIN product_varians pv ON ci.product_variant_id = pv.id
+			WHERE pv.product_id = p.id
 				AND ci.deleted_at IS NULL
 		), 0), 1) AS rating,
 		CAST((
 			SELECT COUNT(pr.id)
 			FROM previews pr
 			JOIN checkout_items ci ON pr.checkout_item_id = ci.id
-			WHERE ci.product_id = p.id
+			JOIN product_varians pv ON ci.product_variant_id = pv.id
+			WHERE pv.product_id = p.id
 				AND ci.deleted_at IS NULL
 		) AS INTEGER) AS total_reviewers,
 		CAST((
 			SELECT SUM(ci.qty)
 			FROM checkout_items ci 
-			WHERE ci.product_id = p.id
+			JOIN product_varians pv ON ci.product_variant_id = pv.id
+			WHERE pv.product_id = p.id
 				AND ci.deleted_at IS NULL
-		) AS INTEGER) AS total_sold,
-		
+		) AS INTEGER) AS total_sold
 		FROM products p
 		JOIN categories ca ON p.category_id = ca.id
 		WHERE p.deleted_at IS NULL 
@@ -104,18 +106,20 @@ func (p *ProductRepository) GetProductByID(id int) (*model.Products, error) {
 	query := `SELECT p.id, p.name, p.image_url, p.price, p.discount, p.description, c.name,
 			ROUND(COALESCE((
 				SELECT AVG(pr.rating)::numeric
-				FROM previews pr
-				JOIN checkout_items ci ON pr.checkout_item_id = ci.id
-				WHERE ci.product_id = p.id
-					AND ci.deleted_at IS NULL
-			), 0), 1) AS rating,
+					FROM previews pr
+					JOIN checkout_items ci ON pr.checkout_item_id = ci.id
+					JOIN product_varians pv ON ci.product_variant_id = pv.id
+					WHERE pv.product_id = p.id
+						AND ci.deleted_at IS NULL
+				), 0), 1) AS rating,
 			CAST((
 				SELECT COUNT(pr.id)
-				FROM previews pr
-				JOIN checkout_items ci ON pr.checkout_item_id = ci.id
-				WHERE ci.product_id = p.id
-					AND ci.deleted_at IS NULL
-			) AS INTEGER) AS total_reviewers
+					FROM previews pr
+					JOIN checkout_items ci ON pr.checkout_item_id = ci.id
+					JOIN product_varians pv ON ci.product_variant_id = pv.id
+					WHERE pv.product_id = p.id
+						AND ci.deleted_at IS NULL
+				) AS INTEGER) AS total_reviewers
 			FROM products p
 			LEFT JOIN categories c ON p.category_id = c.id
 			WHERE p.deleted_at IS NULL
