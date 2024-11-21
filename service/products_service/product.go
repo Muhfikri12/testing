@@ -107,3 +107,14 @@ func (ps *ProductsService) ProductsBestSelling(page int, category, name string) 
 
 	return &productsarr, totalData, totalPage, nil
 }
+
+func (ps *ProductsService) GetProductByID(id int) (*model.Products, error) {
+
+	product, err := ps.Repo.ProductsRepo.GetProductByID(id)
+	if err != nil {
+		ps.Logger.Error("Error Failed from GetProductByID service: " + err.Error())
+		return nil, err
+	}
+
+	return product, nil
+}

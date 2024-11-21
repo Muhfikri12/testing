@@ -31,11 +31,13 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 
 	md := middleware.NewMiddleware(logger)
 
+	// Authentication
+	auth := middleware.NewAuthHandler(logger)
+
 	repo := repository.NewAllRepository(db, logger)
 	service := service.NewAllService(repo, logger)
 	handler := handler.NewAllHandler(service, logger, config)
 
-	// Menambahkan endpoint ke router
 	r.Route("/api", func(api chi.Router) {
 
 		api.Use(md.MinddlewareLogger)
@@ -46,19 +48,20 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 		})
 
 		api.Route("/wishlists", func(r chi.Router) {
-			r.Use(middleware.AuthenticateToken)
+			r.Use(auth.AuthenticateToken)
 			r.Post("/", handler.ProductHandler.CreateWishlist)
 			r.Delete("/{id}", handler.ProductHandler.DeleteWishlist)
 		})
 
 		api.Route("/carts", func(r chi.Router) {
-			r.Use(middleware.AuthenticateToken)
+			r.Use(auth.AuthenticateToken)
 			r.Get("/", handler.ProductHandler.AllProductsCart)
 		})
 
 		api.Post("/login", handler.UserHandler.Login)
 		api.Post("/register", handler.UserHandler.Register)
 		api.Get("/categories", handler.CategoryHandler.GetAllCategories)
+		api.Get("/product/{id}", handler.ProductHandler.GetProductByID)
 		api.Get("/banners", handler.PromotionHandler.GetAllBanners)
 		api.Get("/promo", handler.PromotionHandler.GetAllPromo)
 		api.Get("/recomended", handler.PromotionHandler.GetAllRecomended)

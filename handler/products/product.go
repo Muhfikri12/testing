@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
 )
 
@@ -66,4 +67,20 @@ func (ph *ProductHandler) GetAllBestSelling(w http.ResponseWriter, r *http.Reque
 	}
 
 	helper.SuccessWithPage(w, http.StatusOK, page, 10, totalPage, totalData, "Successfully", products)
+}
+
+func (ph *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) {
+
+	idStr := chi.URLParam(r, "id")
+
+	id, _ := strconv.Atoi(idStr)
+
+	product, err := ph.Service.ProductService.GetProductByID(id)
+	if err != nil {
+		ph.Log.Error("Error Handler Product: " + err.Error())
+		helper.Responses(w, http.StatusNotFound, "Data tidak tersedia", nil)
+	}
+
+	helper.Responses(w, http.StatusOK, "Successfully Get Data", product)
+
 }
