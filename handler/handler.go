@@ -1,6 +1,7 @@
 package handler
 
 import (
+	cartshandler "ecommers/handler/carts_handler"
 	categorieshandler "ecommers/handler/categories_handler"
 	productshandler "ecommers/handler/products"
 	promotionshandler "ecommers/handler/promotions_handler"
@@ -16,6 +17,7 @@ type AllHandler struct {
 	CategoryHandler  categorieshandler.CategoriesHandler
 	PromotionHandler promotionshandler.PromotionsHandler
 	UserHandler      userhandler.UserHandler
+	CartHandler      cartshandler.CartsHandler
 }
 
 func NewAllHandler(service service.AllService, log *zap.Logger, config util.Configuration) AllHandler {
@@ -24,6 +26,7 @@ func NewAllHandler(service service.AllService, log *zap.Logger, config util.Conf
 		CategoryHandler:  categorieshandler.NewCategoriesHandler(service, log, config),
 		PromotionHandler: promotionshandler.NewPromotionsHandler(service, log, config),
 		UserHandler:      userhandler.NewUserHandler(service, log, config),
+		CartHandler:      cartshandler.NewCartssHandler(service, log, config),
 	}
 
 }

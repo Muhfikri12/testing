@@ -1,8 +1,25 @@
-package products
+package carts
 
-import "ecommers/model"
+import (
+	"database/sql"
+	"ecommers/model"
 
-func (c *ProductRepository) TotalCarts(token string) (*[]model.Cart, error) {
+	"go.uber.org/zap"
+)
+
+type CartsRepository struct {
+	DB     *sql.DB
+	Logger *zap.Logger
+}
+
+func NewCartsRepository(db *sql.DB, Log *zap.Logger) CartsRepository {
+	return CartsRepository{
+		DB:     db,
+		Logger: Log,
+	}
+}
+
+func (c *CartsRepository) TotalCarts(token string) (*[]model.Cart, error) {
 
 	query := `SELECT u.id, COUNT(c.id) as total_products FROM shopping_carts c
 		LEFT JOIN users u ON c.user_id = u.id
