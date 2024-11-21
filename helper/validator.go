@@ -121,6 +121,8 @@ func ValidateInputGeneric[T any](data T) ([]FieldError, error) {
 			message = fmt.Sprintf("%s must be at least %s characters long", err.Field(), err.Param())
 		case "eqfield":
 			message = fmt.Sprintf("%s must match %s", err.Field(), err.Param())
+		// case "alphanum":
+		// 	message = fmt.Sprintf("%s must be number or %s", err.Field(), err.Param())
 		default:
 			message = fmt.Sprintf("%s is invalid", err.Field())
 		}

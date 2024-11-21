@@ -56,10 +56,10 @@ func (ps *ProductsService) GetAll(page int, category, name string) (*[]model.Pro
 		if product.Timestamps.Created_at.Before(thirtyDaysAgo) {
 			product.Status = "New"
 
-			productsarr = append(productsarr, product)
 		}
 
 		product.PriceAfterDiscount = product.Price - (product.Price * product.Discount / 100)
+		productsarr = append(productsarr, product)
 
 	}
 
@@ -90,8 +90,6 @@ func (ps *ProductsService) ProductsBestSelling(page int, category, name string) 
 
 		if product.Timestamps.Created_at.Before(thirtyDaysAgo) {
 			product.Status = "New"
-
-			productsarr = append(productsarr, product)
 		}
 
 		if product.Timestamps.Created_at.Before(thirtyDaysAgo) {
@@ -101,6 +99,7 @@ func (ps *ProductsService) ProductsBestSelling(page int, category, name string) 
 		}
 
 		product.PriceAfterDiscount = product.Price - (product.Price * product.Discount / 100)
+		productsarr = append(productsarr, product)
 
 	}
 

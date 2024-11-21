@@ -20,7 +20,7 @@ func NewUsersService(repo repository.AllRepository, Log *zap.Logger) UsersServic
 	}
 }
 
-func (s *UsersService) Login(login *model.Users) error {
+func (s *UsersService) Login(login *model.Login) error {
 
 	err := s.Repo.UsersRepo.Login(login)
 	if err != nil {

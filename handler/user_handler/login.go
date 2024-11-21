@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 )
 
@@ -27,7 +28,8 @@ func NewUserHandler(service service.AllService, log *zap.Logger, config util.Con
 
 func (l *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 
-	user := model.Users{}
+	user := model.Login{}
+	validate := validator.New()
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		l.Log.Error("Invalid request payload: " + err.Error())
@@ -35,8 +37,14 @@ func (l *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := l.Service.UserService.Login(&user)
+	err := validate.Struct(user)
 	if err != nil {
+		errors, _ := helper.ValidateInputGeneric(user)
+		helper.Responses(w, http.StatusUnprocessableEntity, "validation failed", errors)
+		return
+	}
+
+	if err := l.Service.UserService.Login(&user); err != nil {
 		l.Log.Error("Failed to login: " + err.Error())
 		helper.Responses(w, http.StatusInternalServerError, "Failed to login: "+err.Error(), nil)
 		return

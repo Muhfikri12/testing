@@ -51,6 +51,11 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 			r.Delete("/{id}", handler.ProductHandler.DeleteWishlist)
 		})
 
+		api.Route("/carts", func(r chi.Router) {
+			r.Use(middleware.AuthenticateToken)
+			r.Get("/", handler.ProductHandler.AllProductsCart)
+		})
+
 		api.Post("/login", handler.UserHandler.Login)
 		api.Post("/register", handler.UserHandler.Register)
 		api.Get("/categories", handler.CategoryHandler.GetAllCategories)

@@ -22,9 +22,9 @@ func NewUsersRepository(db *sql.DB, Log *zap.Logger) UsersRepository {
 	}
 }
 
-func (a *UsersRepository) Login(login *model.Users) error {
-	query := `SELECT id, name FROM users WHERE (email=$1 OR phone=$1) AND password=$2`
-	err := a.DB.QueryRow(query, login.Email, login.Password).Scan(&login.ID, &login.Name)
+func (a *UsersRepository) Login(login *model.Login) error {
+	query := `SELECT id FROM users WHERE (email=$1 OR phone=$1) AND password=$2`
+	err := a.DB.QueryRow(query, login.Email, login.Password).Scan(&login.ID)
 
 	if err != nil {
 		if err == sql.ErrNoRows {

@@ -4,9 +4,9 @@ type Products struct {
 	ID                 uint        `json:"id" validate:"required"`
 	Name               string      `json:"name"`
 	ImageUrl           string      `json:"image_url"`
-	Price              float64     `json:"price"`
-	PriceAfterDiscount float64     `json:"price_after_discount,omitempty"`
-	Discount           float64     `json:"discount"`
+	Price              int         `json:"price"`
+	PriceAfterDiscount int         `json:"price_after_discount,omitempty"`
+	Discount           int         `json:"discount"`
 	Description        string      `json:"description"`
 	Status             string      `json:"status"`
 	Categories         *Categories `json:"categories,omitempty"`

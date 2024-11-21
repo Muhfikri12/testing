@@ -7,7 +7,9 @@ import (
 
 func (ch *ProductHandler) AllProductsCart(w http.ResponseWriter, r *http.Request) {
 
-	carts, err := ch.Service.ProductService.TotalProducts()
+	token := r.Header.Get("Authorization")
+
+	carts, err := ch.Service.ProductService.TotalProducts(token)
 	if err != nil {
 		ch.Log.Error("Failed to Get total product cart: " + err.Error())
 		helper.Responses(w, http.StatusInternalServerError, "Failed to Get total product cart: "+err.Error(), nil)

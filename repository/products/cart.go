@@ -2,14 +2,14 @@ package products
 
 import "ecommers/model"
 
-func (c *ProductRepository) TotalCarts() (*[]model.Cart, error) {
+func (c *ProductRepository) TotalCarts(token string) (*[]model.Cart, error) {
 
 	query := `SELECT u.id, COUNT(c.id) as total_products FROM shopping_carts c
 		LEFT JOIN users u ON c.user_id = u.id
-		WHERE c.deleted_at IS NULL AND c.user_id = 
+		WHERE c.deleted_at IS NULL AND u.token = $1
 		GROUP BY u.id`
 
-	rows, err := c.DB.Query(query)
+	rows, err := c.DB.Query(query, token)
 	if err != nil {
 		c.Logger.Error("Error from repository: " + err.Error())
 		return nil, err

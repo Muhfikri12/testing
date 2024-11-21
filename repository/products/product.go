@@ -42,7 +42,8 @@ func (p *ProductRepository) ShowAllProducts(limit, page int, category, name stri
 			FROM checkout_items ci 
 			WHERE ci.product_id = p.id
 				AND ci.deleted_at IS NULL
-		) AS INTEGER) AS total_sold
+		) AS INTEGER) AS total_sold,
+		
 		FROM products p
 		JOIN categories ca ON p.category_id = ca.id
 		WHERE p.deleted_at IS NULL 
