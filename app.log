@@ -1,2 +1,5 @@
-{"L":"INFO","T":"2024-11-21T23:15:59.846+0700","M":"Starting server","port":"8000"}
-{"L":"INFO","T":"2024-11-21T23:16:03.593+0700","M":"http request","url":"/api/users","duration":"19.057135ms"}
+{"L":"INFO","T":"2024-11-22T20:42:49.803+0700","M":"Starting server","port":"8000"}
+{"L":"WARN","T":"2024-11-22T20:42:52.311+0700","M":"No cart item deleted, possibly already soft deleted or not found"}
+{"L":"ERROR","T":"2024-11-22T20:42:52.311+0700","M":"Error from service DeleteCart: item not found or already deleted"}
+{"L":"ERROR","T":"2024-11-22T20:42:52.311+0700","M":"Failed to Delete item: item not found or already deleted"}
+{"L":"INFO","T":"2024-11-22T20:42:52.311+0700","M":"http request","url":"/api/carts","duration":"48.681746ms"}

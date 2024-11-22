@@ -16,6 +16,7 @@ type DatabaseConfig struct {
 	Username string
 	Password string
 	Host     string
+	Timezone string
 }
 
 func ReadConfiguration() (Configuration, error) {
@@ -46,6 +47,7 @@ func ReadConfiguration() (Configuration, error) {
 			Username: viper.GetString("DATABASE_USERNAME"),
 			Password: viper.GetString("DATABASE_PASSWORD"),
 			Host:     viper.GetString("DATABASE_HOST"),
+			Timezone: viper.GetString("DATABASE_TIMEZONE"),
 		},
 	}, nil
 }

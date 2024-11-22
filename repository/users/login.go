@@ -35,7 +35,7 @@ func (a *UsersRepository) Login(login *model.Login) error {
 
 	token := uuid.New().String()
 
-	expiration := time.Now().Add(1 * time.Hour)
+	expiration := time.Now().UTC().Add(1 * time.Hour)
 	updateQuery := `UPDATE users SET token=$1, expired=$2 WHERE id=$3`
 	_, err = a.DB.Exec(updateQuery, token, expiration, login.ID)
 	if err != nil {

@@ -55,10 +55,8 @@ func (a *AuthHandler) AuthenticateToken(next http.Handler) http.Handler {
 			http.Error(w, "Server error"+err.Error(), http.StatusInternalServerError)
 			return
 		}
-		// fmt.Println(expiresAt)
 
-		expired := time.Now().After(expiresAt)
-		if expired {
+		if time.Now().UTC().After(expiresAt) {
 			a.Log.Error("Token expired")
 			helper.Responses(w, http.StatusUnauthorized, "Token expired", nil)
 			return

@@ -10,7 +10,7 @@ import (
 )
 
 func InitDB(config util.Configuration) (*sql.DB, error) {
-	connStr := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable host=%s",
+	connStr := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable host=%s timezone=Asia/Jakarta",
 		config.DB.Username, config.DB.Password, config.DB.Name, config.DB.Host)
 	db, err := sql.Open("postgres", connStr)
 
