@@ -65,7 +65,10 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 		api.Route("/users", func(r chi.Router) {
 			r.Use(auth.AuthenticateToken)
 			r.Get("/", handler.UserHandler.GetListAddress)
+			r.Put("/", handler.UserHandler.UpdateUserData)
 			r.Get("/detail", handler.UserHandler.GetDetailUser)
+			r.Post("/add/address", handler.UserHandler.AddAddress)
+			r.Patch("/add/address", handler.UserHandler.UpdateAddress)
 		})
 
 		api.Route("/order", func(r chi.Router) {
