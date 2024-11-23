@@ -14,3 +14,14 @@ func (u *UsersService) GetListAddress(token string) (*[]model.Users, error) {
 
 	return users, nil
 }
+
+func (u *UsersService) GetDetailUser(token string) (*model.Users, error) {
+
+	user, err := u.Repo.UsersRepo.GetDetailUser(token)
+	if err != nil {
+		u.Logger.Error("Error from service GetDetailUser: " + err.Error())
+		return nil, err
+	}
+
+	return user, nil
+}

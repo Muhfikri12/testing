@@ -1,3 +1,2 @@
-{"L":"INFO","T":"2024-11-22T23:07:14.018+0700","M":"Starting server","port":"8000"}
-{"L":"INFO","T":"2024-11-22T23:07:17.954+0700","M":"http request","url":"/api/carts/detail","duration":"21.655464ms"}
-{"L":"INFO","T":"2024-11-22T23:07:48.493+0700","M":"http request","url":"/api/order","duration":"14.867523ms"}
+{"L":"INFO","T":"2024-11-23T08:30:17.873+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-23T08:30:20.988+0700","M":"http request","url":"/api/users/detail","duration":"19.919719ms"}
