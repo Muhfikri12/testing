@@ -26,7 +26,8 @@ func NewProductsService(repo repository.AllRepository, Log *zap.Logger) Products
 func (ps *ProductsService) GetAll(page int, category, name string) (*[]model.Products, int, int, error) {
 	limit := 10
 
-	thirtyDaysAgo := time.Now().AddDate(0, 0, 30)
+	today := time.Now()
+	end := time.Now().AddDate(0, 0, -30)
 
 	if category == "" {
 		category = ""
@@ -53,7 +54,7 @@ func (ps *ProductsService) GetAll(page int, category, name string) (*[]model.Pro
 
 	for _, product := range *products {
 
-		if product.Timestamps.Created_at.Before(thirtyDaysAgo) {
+		if product.Timestamps.Created_at.Before(today) && product.Timestamps.Created_at.After(end) {
 			product.Status = "New"
 
 		}
@@ -69,10 +70,13 @@ func (ps *ProductsService) GetAll(page int, category, name string) (*[]model.Pro
 func (ps *ProductsService) ProductsBestSelling(page int, category, name string) (*[]model.Products, int, int, error) {
 	limit := 10
 
-	// Hitung awal dan akhir bulan ini
-	thirtyDaysAgo := time.Now().AddDate(0, 0, 30)
+	var count int
 
-	// Ambil data produk dari repository
+	today := time.Now()
+	end := time.Now().AddDate(0, 0, -30)
+
+	thirtyDaysAgo := time.Now().UTC().AddDate(0, 0, -30)
+
 	products, totalData, err := ps.Repo.ProductsRepo.ShowAllProducts(limit, page, category, name)
 	if err != nil {
 		ps.Logger.Error("Error fetching products: " + err.Error())
@@ -88,24 +92,30 @@ func (ps *ProductsService) ProductsBestSelling(page int, category, name string) 
 
 	for _, product := range *products {
 
-		if product.Timestamps.Created_at.Before(thirtyDaysAgo) {
-			product.Status = "New"
+		if product.Timestamps.Created_at.Before(end) || product.Timestamps.Created_at.After(today) {
+			continue
 		}
 
-		if product.Timestamps.Created_at.Before(thirtyDaysAgo) {
-			sort.Slice(productsarr, func(i, j int) bool {
-				return productsarr[i].Checkouts.TotalSold > productsarr[j].Checkouts.TotalSold
-			})
-		}
+		product.Status = "New"
 
 		product.PriceAfterDiscount = product.Price - (product.Price * product.Discount / 100)
-		productsarr = append(productsarr, product)
 
+		count += 1
+
+		productsarr = append(productsarr, product)
 	}
 
-	totalPage := int(math.Ceil(float64(totalData) / float64(limit)))
+	sort.Slice(productsarr, func(i, j int) bool {
+		return productsarr[i].Checkouts.TotalSold > productsarr[j].Checkouts.TotalSold
+	})
 
-	return &productsarr, totalData, totalPage, nil
+	ps.Logger.Info("Threshold Date:", zap.Time("thirty_days_ago", thirtyDaysAgo))
+
+	totalDataItem := totalData - (totalData - count)
+
+	totalPage := int(math.Ceil(float64(totalDataItem) / float64(limit)))
+
+	return &productsarr, totalDataItem, totalPage, nil
 }
 
 func (ps *ProductsService) GetProductByID(id int) (*model.Products, error) {
