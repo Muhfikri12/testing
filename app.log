@@ -1,5 +1,3 @@
-{"L":"INFO","T":"2024-11-22T20:42:49.803+0700","M":"Starting server","port":"8000"}
-{"L":"WARN","T":"2024-11-22T20:42:52.311+0700","M":"No cart item deleted, possibly already soft deleted or not found"}
-{"L":"ERROR","T":"2024-11-22T20:42:52.311+0700","M":"Error from service DeleteCart: item not found or already deleted"}
-{"L":"ERROR","T":"2024-11-22T20:42:52.311+0700","M":"Failed to Delete item: item not found or already deleted"}
-{"L":"INFO","T":"2024-11-22T20:42:52.311+0700","M":"http request","url":"/api/carts","duration":"48.681746ms"}
+{"L":"INFO","T":"2024-11-22T23:07:14.018+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-22T23:07:17.954+0700","M":"http request","url":"/api/carts/detail","duration":"21.655464ms"}
+{"L":"INFO","T":"2024-11-22T23:07:48.493+0700","M":"http request","url":"/api/order","duration":"14.867523ms"}

@@ -58,7 +58,7 @@ func (c *CartsRepository) GetDetailCart(token string) (*[]model.Products, error)
 		JOIN product_varians pv ON c.product_variant_id = pv.id
 		JOIN products p ON pv.product_id = p.id
 		JOIN users u ON c.user_id = u.id
-		WHERE pv.product_id = p.id AND u.token = $1 AND deleted_at IS NULL
+		WHERE pv.product_id = p.id AND u.token = $1 AND c.deleted_at IS NULL
 		GROUP BY p.name, p.image_url, p.price, p.discount`
 
 	rows, err := c.DB.Query(query, token)
