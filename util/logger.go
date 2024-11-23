@@ -13,7 +13,7 @@ func InitLog() *zap.Logger {
 	core := zapcore.NewCore(
 		zapcore.NewJSONEncoder(zap.NewDevelopmentEncoderConfig()),
 		writer,
-		zap.InfoLevel,
+		zap.DebugLevel,
 	)
 	logger := zap.New(core)
 	return logger

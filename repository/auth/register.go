@@ -14,9 +14,9 @@ func (u *AuthRepository) Register(user *model.Users) error {
 
 	user.Username += fmt.Sprintf("%d", rand.Intn(1000))
 
-	query := `INSERT INTO users(name, username, address, phone, email, password) values($1, $2, $3, $4, $5, $6) RETURNING id`
+	query := `INSERT INTO users(name, username, phone, email, password, created_at, updated_at) values($1, $2, $3, $4, $5, NOW(), NOW()) RETURNING id`
 
-	if err := u.DB.QueryRow(query, user.Name, user.Username, user.Address, user.Phone, user.Email, user.Password).Scan(&user.ID); err != nil {
+	if err := u.DB.QueryRow(query, user.Name, user.Username, user.Phone, user.Email, user.Password).Scan(&user.ID); err != nil {
 		u.Logger.Error("Error from register repository: " + err.Error())
 		return err
 	}

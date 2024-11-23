@@ -1,4 +1,20 @@
-{"L":"INFO","T":"2024-11-23T18:49:15.512+0700","M":"Starting server","port":"8000"}
-{"L":"INFO","T":"2024-11-23T18:49:55.546+0700","M":"http request","url":"/api/users/address/16","duration":"24.243904ms"}
-{"L":"INFO","T":"2024-11-23T18:50:29.248+0700","M":"http request","url":"/api/users/address/10","duration":"14.380559ms"}
-{"L":"INFO","T":"2024-11-23T18:50:38.706+0700","M":"http request","url":"/api/users/address/10","duration":"11.256655ms"}
+{"L":"INFO","T":"2024-11-23T20:54:13.536+0700","M":"Starting server","port":"8000"}
+{"L":"DEBUG","T":"2024-11-23T20:54:15.505+0700","M":"Invalid Phone Or Email: sql: no rows in result set"}
+{"L":"ERROR","T":"2024-11-23T20:54:15.505+0700","M":"Failed to login: login failed: email or phone not found"}
+{"L":"INFO","T":"2024-11-23T20:54:15.505+0700","M":"http request","url":"/api/login","duration":"10.055004ms"}
+{"L":"DEBUG","T":"2024-11-23T20:55:07.555+0700","M":"Invalid Password: sql: no rows in result set"}
+{"L":"ERROR","T":"2024-11-23T20:55:07.555+0700","M":"Failed to login: login failed: password salah"}
+{"L":"INFO","T":"2024-11-23T20:55:07.555+0700","M":"http request","url":"/api/login","duration":"4.641376ms"}
+{"L":"DEBUG","T":"2024-11-23T20:56:23.985+0700","M":"Invalid Password: sql: no rows in result set"}
+{"L":"ERROR","T":"2024-11-23T20:56:23.985+0700","M":"Failed to login: login failed: password salah"}
+{"L":"INFO","T":"2024-11-23T20:56:23.985+0700","M":"http request","url":"/api/login","duration":"1.400676ms"}
+{"L":"DEBUG","T":"2024-11-23T20:57:38.527+0700","M":"Invalid Password: sql: no rows in result set"}
+{"L":"ERROR","T":"2024-11-23T20:57:38.527+0700","M":"Failed to login: login failed: password salah"}
+{"L":"INFO","T":"2024-11-23T20:57:38.527+0700","M":"http request","url":"/api/login","duration":"1.633605ms"}
+{"L":"DEBUG","T":"2024-11-23T20:57:55.670+0700","M":"Invalid Password: sql: no rows in result set"}
+{"L":"ERROR","T":"2024-11-23T20:57:55.670+0700","M":"Failed to login: login failed: password salah"}
+{"L":"INFO","T":"2024-11-23T20:57:55.670+0700","M":"http request","url":"/api/login","duration":"970.517µs"}
+{"L":"DEBUG","T":"2024-11-23T20:58:33.611+0700","M":"Invalid Password: sql: no rows in result set"}
+{"L":"ERROR","T":"2024-11-23T20:58:33.611+0700","M":"Failed to login: login failed: password salah"}
+{"L":"INFO","T":"2024-11-23T20:58:33.611+0700","M":"http request","url":"/api/login","duration":"992.631µs"}
+{"L":"INFO","T":"2024-11-23T20:58:45.187+0700","M":"http request","url":"/api/login","duration":"7.028805ms"}
