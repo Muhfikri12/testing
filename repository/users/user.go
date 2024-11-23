@@ -1,9 +1,24 @@
 package users
 
 import (
+	"database/sql"
 	"ecommers/model"
 	"fmt"
+
+	"go.uber.org/zap"
 )
+
+type UsersRepository struct {
+	DB     *sql.DB
+	Logger *zap.Logger
+}
+
+func NewUsersRepository(db *sql.DB, Log *zap.Logger) UsersRepository {
+	return UsersRepository{
+		DB:     db,
+		Logger: Log,
+	}
+}
 
 func (u *UsersRepository) GetListAddress(token string) (*[]model.Addresses, error) {
 	query := `SELECT  a.address FROM users u JOIN addresses a ON a.user_id = u.id WHERE u.token = $1`

@@ -1,13 +1,13 @@
 package handler
 
 import (
+	authhandler "ecommers/handler/auth_handler"
 	cartshandler "ecommers/handler/carts_handler"
 	categorieshandler "ecommers/handler/categories_handler"
 	checkouthandler "ecommers/handler/checkout_handler"
 	productshandler "ecommers/handler/products"
 	promotionshandler "ecommers/handler/promotions_handler"
 	userhandler "ecommers/handler/user_handler"
-	"ecommers/middleware"
 	"ecommers/service"
 	"ecommers/util"
 
@@ -21,7 +21,7 @@ type AllHandler struct {
 	UserHandler      userhandler.UserHandler
 	CartHandler      cartshandler.CartsHandler
 	Checkouthandler  checkouthandler.CheckoutsHandler
-	AuthHandler      middleware.AuthHandler
+	AuthHandler      authhandler.AuthHandler
 }
 
 func NewAllHandler(service service.AllService, log *zap.Logger, config util.Configuration) AllHandler {
@@ -32,7 +32,7 @@ func NewAllHandler(service service.AllService, log *zap.Logger, config util.Conf
 		UserHandler:      userhandler.NewUserHandler(service, log, config),
 		CartHandler:      cartshandler.NewCartssHandler(service, log, config),
 		Checkouthandler:  checkouthandler.NewCheckoutsHandler(service, log, config),
-		AuthHandler:      middleware.NewAuthHandler(log),
+		AuthHandler:      authhandler.NewAuthHandler(service, log, config),
 	}
 
 }

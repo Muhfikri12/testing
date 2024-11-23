@@ -1,4 +1,4 @@
-package userhandler
+package authhandler
 
 import (
 	"ecommers/helper"
@@ -9,7 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func (u *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
+func (u *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	user := model.Users{}
 	validate := validator.New()
 
@@ -26,7 +26,7 @@ func (u *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := u.Service.UserService.Register(&user); err != nil {
+	if err := u.Service.AuthService.Register(&user); err != nil {
 		u.Log.Error("Failed to Register: " + err.Error())
 		helper.Responses(w, http.StatusInternalServerError, "failed to Register: "+err.Error(), nil)
 		return

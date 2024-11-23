@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"ecommers/repository/auth"
 	"ecommers/repository/carts"
 	"ecommers/repository/category"
 	"ecommers/repository/checkout"
@@ -19,6 +20,7 @@ type AllRepository struct {
 	UsersRepo     users.UsersRepository
 	CartRepo      carts.CartsRepository
 	CheckoutRepo  checkout.CheckoutsRepository
+	AuthRepo      auth.AuthRepository
 }
 
 func NewAllRepository(db *sql.DB, log *zap.Logger) AllRepository {
@@ -29,5 +31,6 @@ func NewAllRepository(db *sql.DB, log *zap.Logger) AllRepository {
 		UsersRepo:     users.NewUsersRepository(db, log),
 		CartRepo:      carts.NewCartsRepository(db, log),
 		CheckoutRepo:  checkout.NewCheckoutsRepository(db, log),
+		AuthRepo:      auth.NewAuthRepository(db, log),
 	}
 }

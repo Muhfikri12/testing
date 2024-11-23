@@ -47,7 +47,7 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 		})
 
 		api.Route("/wishlists", func(r chi.Router) {
-			r.Use(handler.AuthHandler.AuthenticateToken)
+			r.Use(auth.AuthenticateToken)
 			r.Post("/", handler.ProductHandler.CreateWishlist)
 			r.Delete("/{id}", handler.ProductHandler.DeleteWishlist)
 		})
@@ -76,11 +76,11 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 		api.Route("/order", func(r chi.Router) {
 			r.Use(auth.AuthenticateToken)
 			r.Get("/", handler.Checkouthandler.GetDetailCheckout)
-			r.Post("/", handler.CartHandler.CreateOrder)
+			r.Post("/", handler.Checkouthandler.CreateOrder)
 		})
 
-		api.Post("/login", handler.UserHandler.Login)
-		api.Post("/register", handler.UserHandler.Register)
+		api.Post("/login", handler.AuthHandler.Login)
+		api.Post("/register", handler.AuthHandler.Register)
 		api.Get("/categories", handler.CategoryHandler.GetAllCategories)
 		api.Get("/product/{id}", handler.ProductHandler.GetProductByID)
 		api.Get("/banners", handler.PromotionHandler.GetAllBanners)

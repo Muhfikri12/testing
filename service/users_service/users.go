@@ -2,7 +2,22 @@ package usersservice
 
 import (
 	"ecommers/model"
+	"ecommers/repository"
+
+	"go.uber.org/zap"
 )
+
+type UsersService struct {
+	Repo   repository.AllRepository
+	Logger *zap.Logger
+}
+
+func NewUsersService(repo repository.AllRepository, Log *zap.Logger) UsersService {
+	return UsersService{
+		Repo:   repo,
+		Logger: Log,
+	}
+}
 
 func (u *UsersService) GetListAddress(token string) (*[]model.Addresses, error) {
 

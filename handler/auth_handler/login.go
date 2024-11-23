@@ -1,4 +1,4 @@
-package userhandler
+package authhandler
 
 import (
 	"ecommers/helper"
@@ -12,21 +12,21 @@ import (
 	"go.uber.org/zap"
 )
 
-type UserHandler struct {
+type AuthHandler struct {
 	Service service.AllService
 	Log     *zap.Logger
 	Config  util.Configuration
 }
 
-func NewUserHandler(service service.AllService, log *zap.Logger, config util.Configuration) UserHandler {
-	return UserHandler{
+func NewAuthHandler(service service.AllService, log *zap.Logger, config util.Configuration) AuthHandler {
+	return AuthHandler{
 		Service: service,
 		Log:     log,
 		Config:  config,
 	}
 }
 
-func (l *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+func (l *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	user := model.Login{}
 	validate := validator.New()
@@ -44,7 +44,7 @@ func (l *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := l.Service.UserService.Login(&user); err != nil {
+	if err := l.Service.AuthService.Login(&user); err != nil {
 		l.Log.Error("Failed to login: " + err.Error())
 		helper.Responses(w, http.StatusInternalServerError, "Failed to login: "+err.Error(), nil)
 		return

@@ -2,6 +2,7 @@ package service
 
 import (
 	"ecommers/repository"
+	authservice "ecommers/service/auth_service"
 	cartservice "ecommers/service/cart_service"
 	categoryservice "ecommers/service/category_service"
 	checkoutservice "ecommers/service/checkout_service"
@@ -19,6 +20,7 @@ type AllService struct {
 	UserService      usersservice.UsersService
 	CartService      cartservice.CartsService
 	CheckoutService  checkoutservice.CheckoutsService
+	AuthService      authservice.AuthService
 }
 
 func NewAllService(repo repository.AllRepository, log *zap.Logger) AllService {
@@ -29,5 +31,6 @@ func NewAllService(repo repository.AllRepository, log *zap.Logger) AllService {
 		UserService:      usersservice.NewUsersService(repo, log),
 		CartService:      cartservice.NewCartsService(repo, log),
 		CheckoutService:  checkoutservice.NewCheckoutsService(repo, log),
+		AuthService:      authservice.NewAuthService(repo, log),
 	}
 }

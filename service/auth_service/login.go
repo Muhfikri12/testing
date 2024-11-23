@@ -1,4 +1,4 @@
-package usersservice
+package authservice
 
 import (
 	"ecommers/model"
@@ -8,21 +8,21 @@ import (
 	"go.uber.org/zap"
 )
 
-type UsersService struct {
+type AuthService struct {
 	Repo   repository.AllRepository
 	Logger *zap.Logger
 }
 
-func NewUsersService(repo repository.AllRepository, Log *zap.Logger) UsersService {
-	return UsersService{
+func NewAuthService(repo repository.AllRepository, Log *zap.Logger) AuthService {
+	return AuthService{
 		Repo:   repo,
 		Logger: Log,
 	}
 }
 
-func (s *UsersService) Login(login *model.Login) error {
+func (s *AuthService) Login(login *model.Login) error {
 
-	err := s.Repo.UsersRepo.Login(login)
+	err := s.Repo.AuthRepo.Login(login)
 	if err != nil {
 		return errors.New("login failed: " + err.Error())
 	}

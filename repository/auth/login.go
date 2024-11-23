@@ -1,4 +1,4 @@
-package users
+package auth
 
 import (
 	"database/sql"
@@ -10,19 +10,19 @@ import (
 	"go.uber.org/zap"
 )
 
-type UsersRepository struct {
+type AuthRepository struct {
 	DB     *sql.DB
 	Logger *zap.Logger
 }
 
-func NewUsersRepository(db *sql.DB, Log *zap.Logger) UsersRepository {
-	return UsersRepository{
+func NewAuthRepository(db *sql.DB, Log *zap.Logger) AuthRepository {
+	return AuthRepository{
 		DB:     db,
 		Logger: Log,
 	}
 }
 
-func (a *UsersRepository) Login(login *model.Login) error {
+func (a *AuthRepository) Login(login *model.Login) error {
 	query := `SELECT id FROM users WHERE (email=$1 OR phone=$1) AND password=$2`
 	err := a.DB.QueryRow(query, login.Email, login.Password).Scan(&login.ID)
 

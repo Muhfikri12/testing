@@ -125,7 +125,6 @@ func (c *CartsRepository) GetUserID(token string) (int, error) {
 	}
 
 	return userID, err
-
 }
 
 func (c *CartsRepository) UpdateCart(token string, product *model.Products) error {

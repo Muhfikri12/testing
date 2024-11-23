@@ -1,9 +1,17 @@
-package carts
+package checkout
 
-func (c *CartsRepository) ProcessCheckout(token string) error {
-	userID, err := c.GetUserID(token)
+func (c *CheckoutsRepository) ProcessCheckout(token string) error {
+
+	var userID int
+
+	queryGetUserID := `
+		SELECT id
+		FROM users
+		WHERE token = $1
+	`
+	err := c.DB.QueryRow(queryGetUserID, token).Scan(&userID)
 	if err != nil {
-		c.Logger.Error("Error getting User ID: " + err.Error())
+		c.Logger.Error("Error from Get Id User: " + err.Error())
 		return err
 	}
 

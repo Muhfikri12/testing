@@ -1,4 +1,4 @@
-package users
+package auth
 
 import (
 	"ecommers/model"
@@ -8,7 +8,7 @@ import (
 	"golang.org/x/exp/rand"
 )
 
-func (u *UsersRepository) Register(user *model.Users) error {
+func (u *AuthRepository) Register(user *model.Users) error {
 
 	user.Username = strings.ReplaceAll(user.Name, " ", "")
 
