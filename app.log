@@ -1,2 +1,4 @@
-{"L":"INFO","T":"2024-11-23T16:52:30.398+0700","M":"Starting server","port":"8000"}
-{"L":"INFO","T":"2024-11-23T16:52:37.614+0700","M":"http request","url":"/api/users/add/address","duration":"22.436104ms"}
+{"L":"INFO","T":"2024-11-23T18:49:15.512+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-23T18:49:55.546+0700","M":"http request","url":"/api/users/address/16","duration":"24.243904ms"}
+{"L":"INFO","T":"2024-11-23T18:50:29.248+0700","M":"http request","url":"/api/users/address/10","duration":"14.380559ms"}
+{"L":"INFO","T":"2024-11-23T18:50:38.706+0700","M":"http request","url":"/api/users/address/10","duration":"11.256655ms"}

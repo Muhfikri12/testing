@@ -5,7 +5,9 @@ import (
 	"ecommers/model"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -65,4 +67,40 @@ func (uh *UserHandler) UpdateAddress(w http.ResponseWriter, r *http.Request) {
 	}
 
 	helper.Responses(w, http.StatusOK, "Succesfully Update address", address)
+}
+
+func (uh *UserHandler) DeleteAddress(w http.ResponseWriter, r *http.Request) {
+
+	token := r.Header.Get("Authorization")
+
+	idStr := chi.URLParam(r, "id")
+
+	id, _ := strconv.Atoi(idStr)
+
+	err := uh.Service.UserService.DeleteAddress(token, id)
+	if err != nil {
+		uh.Log.Error("Failed to delete address: " + err.Error())
+		helper.Responses(w, http.StatusInternalServerError, "Failed to update address", nil)
+		return
+	}
+
+	helper.Responses(w, http.StatusOK, "Succesfully delete address", nil)
+}
+
+func (uh *UserHandler) SetDefault(w http.ResponseWriter, r *http.Request) {
+
+	token := r.Header.Get("Authorization")
+
+	idStr := chi.URLParam(r, "id")
+
+	id, _ := strconv.Atoi(idStr)
+
+	err := uh.Service.UserService.SetDefault(token, id)
+	if err != nil {
+		uh.Log.Error("Failed to Set Default address: " + err.Error())
+		helper.Responses(w, http.StatusInternalServerError, "Failed to Set Default address", nil)
+		return
+	}
+
+	helper.Responses(w, http.StatusOK, "Succesfully Set Default address", nil)
 }
