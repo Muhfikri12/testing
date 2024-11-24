@@ -1,12 +1,8 @@
 package productsservice
 
-import (
-	"ecommers/model"
-)
+func (ws *ProductsService) CreateWishlist(token string, id int) error {
 
-func (ws *ProductsService) CreateWishlist(wishlist *model.Wishlists) error {
-
-	err := ws.Repo.ProductsRepo.CreateWishlisht(wishlist)
+	err := ws.Repo.ProductsRepo.CreateWishlisht(token, id)
 	if err != nil {
 		ws.Logger.Error("Error from Service: " + err.Error())
 		return err

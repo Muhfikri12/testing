@@ -1,3 +1,7 @@
-{"L":"INFO","T":"2024-11-23T22:31:34.620+0700","M":"Starting server","port":"8000"}
-{"L":"INFO","T":"2024-11-23T22:31:40.712+0700","M":"Threshold Date:","thirty_days_ago":"2024-10-24T15:31:40.680Z"}
-{"L":"INFO","T":"2024-11-23T22:31:40.713+0700","M":"http request","url":"/api/products/best_selling","duration":"32.494114ms"}
+{"L":"INFO","T":"2024-11-24T09:58:23.965+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-24T09:58:36.118+0700","M":"http request","url":"/api/wishlists/4","duration":"40.402045ms"}
+{"L":"INFO","T":"2024-11-24T10:00:10.887+0700","M":"http request","url":"/api/wishlists/4","duration":"11.95054ms"}
+{"L":"DEBUG","T":"2024-11-24T10:00:20.901+0700","M":"Product already exists in wishlist"}
+{"L":"ERROR","T":"2024-11-24T10:00:20.901+0700","M":"Error from Service: product already exists in wishlist"}
+{"L":"ERROR","T":"2024-11-24T10:00:20.901+0700","M":"Failed to create wistlist: product already exists in wishlist"}
+{"L":"INFO","T":"2024-11-24T10:00:20.901+0700","M":"http request","url":"/api/wishlists/4","duration":"14.116172ms"}

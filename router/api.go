@@ -48,7 +48,7 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 
 		api.Route("/wishlists", func(r chi.Router) {
 			r.Use(auth.AuthenticateToken)
-			r.Post("/", handler.ProductHandler.CreateWishlist)
+			r.Post("/{id}", handler.ProductHandler.CreateWishlist)
 			r.Delete("/{id}", handler.ProductHandler.DeleteWishlist)
 		})
 

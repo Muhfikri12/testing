@@ -1,22 +1,40 @@
 package products
 
 import (
-	"ecommers/model"
 	"fmt"
 	"time"
 )
 
-func (w *ProductRepository) CreateWishlisht(wishlists *model.Wishlists) error {
-	today := time.Now()
+func (w *ProductRepository) CreateWishlisht(token string, id int) error {
+	querySelectProduct := `SELECT id FROM product_varians WHERE id=$1`
+	err := w.DB.QueryRow(querySelectProduct, id).Scan(&id)
+	if err != nil {
+		w.Logger.Error("Product not found: " + err.Error())
+		return fmt.Errorf("product not found")
+	}
 
-	wishlists.Timestamps.Created_at = &today
+	queryDetectProduct := `
+        SELECT COUNT(*) 
+        FROM wishlists 
+        WHERE product_variant_id=$1 
+          AND user_id = (SELECT id FROM users WHERE token=$2)
+    `
+	var count int
+	if err := w.DB.QueryRow(queryDetectProduct, id, token).Scan(&count); err != nil {
+		w.Logger.Error("Failed to Query Data " + err.Error())
+		return fmt.Errorf("failed to query data: %w", err)
+	}
 
-	query := `INSERT INTO wishlists(product_id, user_id, created_at) VALUES($1, $2, $3) RETURNING id`
-	if err := w.DB.QueryRow(query, wishlists.ProductID, wishlists.UserID, wishlists.Timestamps.Created_at).Scan(&wishlists.ID); err != nil {
+	if count > 0 {
+		w.Logger.Debug("Product already exists in wishlist")
+		return fmt.Errorf("product already exists in wishlist")
+	}
+
+	query := `INSERT INTO wishlists(product_variant_id, user_id, created_at) VALUES($1,(SELECT id FROM users WHERE token=$2), NOW()) RETURNING id`
+	if err := w.DB.QueryRow(query, id, token).Scan(&id); err != nil {
 		w.Logger.Error("Error from repository: " + err.Error())
 		return err
 	}
-
 	return nil
 }
 

@@ -2,7 +2,7 @@ package model
 
 type Wishlists struct {
 	ID         int   `json:"id"`
-	ProductID  int   `json:"product_id" validate:"required,gte=1"`
-	UserID     int   `json:"user_id" validate:"required,gte=1"`
+	ProductID  int   `json:"product_id"`
+	UserID     int   `json:"user_id"`
 	Timestamps Basic `json:"timestamp,omitempty"`
 }
