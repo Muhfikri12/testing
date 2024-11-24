@@ -24,4 +24,5 @@ type Login struct {
 type Addresses struct {
 	ID      uint   `json:"id,omitempty"`
 	Address string `json:"address,omitempty" validate:"required"`
+	Status  string `json:"status,omitempty" validate:"required"`
 }

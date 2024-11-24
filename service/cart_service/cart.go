@@ -62,9 +62,9 @@ func (cs *CartsService) UpdateCart(token string, id int, cart *model.Products) e
 	return nil
 }
 
-func (cs *CartsService) DeleteCart(token string, cart *model.Products) error {
+func (cs *CartsService) DeleteCart(token string, id int) error {
 
-	err := cs.Repo.CartRepo.DeleteCart(token, cart)
+	err := cs.Repo.CartRepo.DeleteCart(token, id)
 	if err != nil {
 		cs.Logger.Error("Error from service DeleteCart: " + err.Error())
 		return err

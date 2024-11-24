@@ -95,19 +95,15 @@ func (ch *CartsHandler) UpdateCart(w http.ResponseWriter, r *http.Request) {
 func (ch *CartsHandler) DeleteCart(w http.ResponseWriter, r *http.Request) {
 
 	token := r.Header.Get("Authorization")
-	product := model.Products{}
 
-	err := json.NewDecoder(r.Body).Decode(&product)
-	if err != nil {
-		ch.Log.Error("Error from Decode DeleteCart: " + err.Error())
-		return
-	}
+	idStr := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(idStr)
 
-	if err := ch.Service.CartService.DeleteCart(token, &product); err != nil {
+	if err := ch.Service.CartService.DeleteCart(token, id); err != nil {
 		ch.Log.Error("Failed to Delete item: " + err.Error())
 		helper.Responses(w, http.StatusNotFound, "Product not found", nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Successfully deleting item", product)
+	helper.Responses(w, http.StatusOK, "Successfully deleting item", nil)
 }

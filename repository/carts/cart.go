@@ -5,7 +5,6 @@ import (
 	"ecommers/model"
 	"errors"
 	"fmt"
-	"time"
 
 	"go.uber.org/zap"
 )
@@ -139,27 +138,17 @@ func (c *CartsRepository) UpdateCart(token string, id int, product *model.Produc
 	return nil
 }
 
-func (c *CartsRepository) DeleteCart(token string, product *model.Products) error {
-	today := time.Now()
-
-	userID, err := c.GetUserID(token)
-	if err != nil {
-		c.Logger.Error("Error getting User ID: " + err.Error())
-		return err
-	}
-
+func (c *CartsRepository) DeleteCart(token string, id int) error {
 	query := `
-		UPDATE shopping_carts 
-		SET deleted_at = $1
-		WHERE deleted_at IS NULL AND product_variant_id = $2 AND user_id = $3
+		DELETE FROM shopping_carts
+		WHERE product_variant_id = $1 AND user_id = (SELECT id FROM users WHERE token=$2)
 	`
-	result, err := c.DB.Exec(query, today, product.ID, userID)
+	result, err := c.DB.Exec(query, id, token)
 	if err != nil {
 		c.Logger.Error("Error soft deleting cart item: " + err.Error())
 		return err
 	}
 
-	// Periksa apakah ada baris yang diperbarui
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		c.Logger.Error("Error getting RowsAffected: " + err.Error())

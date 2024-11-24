@@ -1,7 +1,2 @@
-{"L":"INFO","T":"2024-11-24T11:52:14.644+0700","M":"Starting server","port":"8000"}
-{"L":"ERROR","T":"2024-11-24T11:52:18.484+0700","M":"Product not foundsql: no rows in result set"}
-{"L":"ERROR","T":"2024-11-24T11:52:18.484+0700","M":"Error from service AddItemToCart: product not found"}
-{"L":"ERROR","T":"2024-11-24T11:52:18.484+0700","M":"Failed to Insert Product to cart: product not found"}
-{"L":"INFO","T":"2024-11-24T11:52:18.484+0700","M":"http request","url":"/api/carts/10","duration":"22.542221ms"}
-{"L":"INFO","T":"2024-11-24T11:52:32.689+0700","M":"http request","url":"/api/carts/5","duration":"13.051785ms"}
-{"L":"INFO","T":"2024-11-24T11:52:38.061+0700","M":"http request","url":"/api/carts/detail","duration":"18.938219ms"}
+{"L":"INFO","T":"2024-11-24T12:24:59.175+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-24T12:25:13.563+0700","M":"http request","url":"/api/users","duration":"29.263422ms"}

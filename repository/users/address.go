@@ -1,20 +1,24 @@
 package users
 
-import "ecommers/model"
+import (
+	"ecommers/model"
+	"fmt"
+)
 
 func (u *UsersRepository) AddAddress(token string, address *model.Addresses) error {
 
-	var userID int
-
-	queryGetUserID := `SELECT id FROM users WHERE token = $1`
-	if err := u.DB.QueryRow(queryGetUserID, token).Scan(&userID); err != nil {
-		u.Logger.Error("Failed to insert address: " + err.Error())
+	var addressCount int
+	queryCheckAddress := `SELECT COUNT(*) FROM addresses WHERE user_id = (SELECT id FROM users WHERE token=$1)`
+	if err := u.DB.QueryRow(queryCheckAddress, token).Scan(&addressCount); err != nil {
+		u.Logger.Error("Failed to check existing addresses: " + err.Error())
 		return err
 	}
 
-	query := `INSERT INTO addresses (address, user_id, created_at, updated_at) VALUES ($1, $2, NOW(), NOW()) RETURNING id`
+	isMain := addressCount == 0
 
-	if err := u.DB.QueryRow(query, address.Address, userID).Scan(&address.ID); err != nil {
+	queryInsert := `INSERT INTO addresses (address, user_id, is_main, created_at, updated_at) 
+                    VALUES ($1, (SELECT id FROM users WHERE token=$2), $3, NOW(), NOW()) RETURNING id`
+	if err := u.DB.QueryRow(queryInsert, address.Address, token, isMain).Scan(&address.ID); err != nil {
 		u.Logger.Error("Failed to insert address: " + err.Error())
 		return err
 	}
@@ -85,4 +89,40 @@ func (u *UsersRepository) SetDefault(token string, id int) error {
 	}
 
 	return nil
+}
+
+func (u *UsersRepository) GetListAddress(token string) (*[]model.Addresses, error) {
+
+	var isMain bool
+	query := `SELECT address, is_main FROM addresses WHERE user_id = (SELECT id FROM users WHERE token=$1) `
+
+	rows, err := u.DB.Query(query, token)
+	if err != nil {
+		u.Logger.Error("Error from query GetListAddress: " + err.Error())
+		return nil, err
+	}
+	defer rows.Close()
+
+	users := []model.Addresses{}
+
+	for rows.Next() {
+		user := model.Addresses{}
+		if err := rows.Scan(&user.Address, &isMain); err != nil {
+			u.Logger.Error("Error from Scan GetListAddress: " + err.Error())
+			return nil, err
+		}
+
+		if isMain {
+			user.Status = "default"
+		}
+
+		users = append(users, user)
+	}
+
+	if len(users) == 0 {
+		u.Logger.Warn("No addresses found for the given token")
+		return nil, fmt.Errorf("no addresses found for token: %s", token)
+	}
+
+	return &users, nil
 }
