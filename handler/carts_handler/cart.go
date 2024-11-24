@@ -63,7 +63,7 @@ func (ch *CartsHandler) AddItemToCart(w http.ResponseWriter, r *http.Request) {
 
 	if err := ch.Service.CartService.AddItemToCart(token, id); err != nil {
 		ch.Log.Error("Failed to Insert Product to cart: " + err.Error())
-		helper.Responses(w, http.StatusInternalServerError, "failed to insert product to cart", nil)
+		helper.Responses(w, http.StatusInternalServerError, "failed to insert product to cart: "+err.Error(), nil)
 		return
 	}
 

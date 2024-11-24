@@ -1,6 +1,7 @@
-{"L":"INFO","T":"2024-11-24T11:39:51.579+0700","M":"Starting server","port":"8000"}
-{"L":"WARN","T":"2024-11-24T11:40:18.737+0700","M":"No cart item deleted, possibly already soft deleted or not found"}
-{"L":"ERROR","T":"2024-11-24T11:40:18.737+0700","M":"Error from service UpdateCart: item not found or already deleted"}
-{"L":"ERROR","T":"2024-11-24T11:40:18.737+0700","M":"Failed to Update Qty: item not found or already deleted"}
-{"L":"INFO","T":"2024-11-24T11:40:18.737+0700","M":"http request","url":"/api/carts/1","duration":"32.740111ms"}
-{"L":"INFO","T":"2024-11-24T11:40:27.437+0700","M":"http request","url":"/api/carts/4","duration":"11.270431ms"}
+{"L":"INFO","T":"2024-11-24T11:52:14.644+0700","M":"Starting server","port":"8000"}
+{"L":"ERROR","T":"2024-11-24T11:52:18.484+0700","M":"Product not foundsql: no rows in result set"}
+{"L":"ERROR","T":"2024-11-24T11:52:18.484+0700","M":"Error from service AddItemToCart: product not found"}
+{"L":"ERROR","T":"2024-11-24T11:52:18.484+0700","M":"Failed to Insert Product to cart: product not found"}
+{"L":"INFO","T":"2024-11-24T11:52:18.484+0700","M":"http request","url":"/api/carts/10","duration":"22.542221ms"}
+{"L":"INFO","T":"2024-11-24T11:52:32.689+0700","M":"http request","url":"/api/carts/5","duration":"13.051785ms"}
+{"L":"INFO","T":"2024-11-24T11:52:38.061+0700","M":"http request","url":"/api/carts/detail","duration":"18.938219ms"}
