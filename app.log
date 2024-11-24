@@ -1,7 +1,7 @@
-{"L":"INFO","T":"2024-11-24T09:58:23.965+0700","M":"Starting server","port":"8000"}
-{"L":"INFO","T":"2024-11-24T09:58:36.118+0700","M":"http request","url":"/api/wishlists/4","duration":"40.402045ms"}
-{"L":"INFO","T":"2024-11-24T10:00:10.887+0700","M":"http request","url":"/api/wishlists/4","duration":"11.95054ms"}
-{"L":"DEBUG","T":"2024-11-24T10:00:20.901+0700","M":"Product already exists in wishlist"}
-{"L":"ERROR","T":"2024-11-24T10:00:20.901+0700","M":"Error from Service: product already exists in wishlist"}
-{"L":"ERROR","T":"2024-11-24T10:00:20.901+0700","M":"Failed to create wistlist: product already exists in wishlist"}
-{"L":"INFO","T":"2024-11-24T10:00:20.901+0700","M":"http request","url":"/api/wishlists/4","duration":"14.116172ms"}
+{"L":"INFO","T":"2024-11-24T10:14:41.664+0700","M":"Starting server","port":"8000"}
+{"L":"DEBUG","T":"2024-11-24T10:14:51.517+0700","M":"No wishlist entry found to delete"}
+{"L":"ERROR","T":"2024-11-24T10:14:51.518+0700","M":"Error from Service: no matching wishlist entry found"}
+{"L":"ERROR","T":"2024-11-24T10:14:51.518+0700","M":"event handler:no matching wishlist entry found"}
+{"L":"INFO","T":"2024-11-24T10:14:51.518+0700","M":"http request","url":"/api/wishlists/10","duration":"51.934275ms"}
+{"L":"INFO","T":"2024-11-24T10:15:02.967+0700","M":"http request","url":"/api/wishlists/4","duration":"13.611424ms"}
+{"L":"INFO","T":"2024-11-24T10:17:09.986+0700","M":"http request","url":"/api/carts","duration":"35.38144ms"}

@@ -11,9 +11,9 @@ func (ws *ProductsService) CreateWishlist(token string, id int) error {
 	return nil
 }
 
-func (ws *ProductsService) DeleteWishlist(id int) error {
+func (ws *ProductsService) DeleteWishlist(id int, token string) error {
 
-	err := ws.Repo.ProductsRepo.DeleteWishlist(id)
+	err := ws.Repo.ProductsRepo.DeleteWishlist(id, token)
 	if err != nil {
 		ws.Logger.Error("Error from Service: " + err.Error())
 		return err

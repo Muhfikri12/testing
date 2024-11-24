@@ -23,7 +23,7 @@ func NewCartsRepository(db *sql.DB, Log *zap.Logger) CartsRepository {
 
 func (c *CartsRepository) TotalCarts(token string) (*[]model.Cart, error) {
 
-	query := `SELECT u.id, COUNT(c.id) as total_products FROM shopping_carts c
+	query := `SELECT COUNT(c.id) as total_products FROM shopping_carts c
 		LEFT JOIN users u ON c.user_id = u.id
 		WHERE c.deleted_at IS NULL AND u.token = $1
 		GROUP BY u.id`

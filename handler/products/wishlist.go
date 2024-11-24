@@ -27,22 +27,13 @@ func (wh *ProductHandler) CreateWishlist(w http.ResponseWriter, r *http.Request)
 func (wh *ProductHandler) DeleteWishlist(w http.ResponseWriter, r *http.Request) {
 
 	idStr := chi.URLParam(r, "id")
-	if idStr == "" {
-		wh.Log.Error("event handler: id parameter missing")
-		helper.Responses(w, http.StatusBadRequest, "id parameter is required", nil)
-		return
-	}
+	id, _ := strconv.Atoi(idStr)
 
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		wh.Log.Error("event handler: " + err.Error())
-		helper.Responses(w, http.StatusBadRequest, "invalid id parameter", nil)
-		return
-	}
+	token := r.Header.Get("Authorization")
 
-	if err := wh.Service.ProductService.DeleteWishlist(id); err != nil {
+	if err := wh.Service.ProductService.DeleteWishlist(id, token); err != nil {
 		wh.Log.Error("event handler:" + err.Error())
-		helper.Responses(w, http.StatusBadRequest, err.Error(), nil)
+		helper.Responses(w, http.StatusNotFound, err.Error(), nil)
 		return
 	}
 

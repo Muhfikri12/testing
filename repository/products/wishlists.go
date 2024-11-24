@@ -2,7 +2,6 @@ package products
 
 import (
 	"fmt"
-	"time"
 )
 
 func (w *ProductRepository) CreateWishlisht(token string, id int) error {
@@ -38,26 +37,25 @@ func (w *ProductRepository) CreateWishlisht(token string, id int) error {
 	return nil
 }
 
-func (w *ProductRepository) DeleteWishlist(id int) error {
+func (w *ProductRepository) DeleteWishlist(id int, token string) error {
 
-	query := `UPDATE wishlists SET deleted_at = $1 WHERE id = $2 AND deleted_at IS NULL`
+	query := `DELETE FROM wishlists WHERE product_variant_id=$1 AND user_id = (SELECT id FROM users WHERE token =$2)`
 
-	now := time.Now()
-
-	result, err := w.DB.Exec(query, now, id)
+	result, err := w.DB.Exec(query, id, token)
 	if err != nil {
-		w.Logger.Error("Error executing soft delete: " + err.Error())
-		return err
+		w.Logger.Error("Error executing Delete: " + err.Error())
+		return fmt.Errorf("failed to delete wishlist")
 	}
 
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
-		w.Logger.Error("Error checking rows affected: " + err.Error())
-		return err
+		w.Logger.Error("Error fetching rows affected: " + err.Error())
+		return fmt.Errorf("failed to fetch rows affected")
 	}
 
 	if rowsAffected == 0 {
-		return fmt.Errorf("no record found to delete or already deleted")
+		w.Logger.Debug("No wishlist entry found to delete")
+		return fmt.Errorf("no matching wishlist entry found")
 	}
 
 	return nil
