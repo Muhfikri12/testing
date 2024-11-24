@@ -57,7 +57,7 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 			r.Get("/", handler.CartHandler.AllProductsCart)
 			r.Post("/{id}", handler.CartHandler.AddItemToCart)
 			r.Get("/detail", handler.CartHandler.GetDetailCart)
-			r.Put("/update-qty", handler.CartHandler.UpdateCart)
+			r.Put("/{id}", handler.CartHandler.UpdateCart)
 			r.Delete("/", handler.CartHandler.DeleteCart)
 
 		})

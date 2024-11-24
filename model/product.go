@@ -25,8 +25,8 @@ type Categories struct {
 }
 
 type Variant struct {
-	Size     string `json:"size,omitempty"`
-	Color    string `json:"color,omitempty"`
-	Stocks   int    `json:"stock,omitempty"`
-	ImageUrl string `json:"image_url,omitempty"`
+	Size     string  `json:"size,omitempty"`
+	Color    string  `json:"color,omitempty"`
+	Stocks   int     `json:"stock,omitempty"`
+	ImageUrl *string `json:"image_url,omitempty"`
 }

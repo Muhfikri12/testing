@@ -24,7 +24,7 @@ func NewCartsRepository(db *sql.DB, Log *zap.Logger) CartsRepository {
 func (c *CartsRepository) TotalCarts(token string) (int, error) {
 
 	var totalProduct int
-	query := `SELECT COUNT(id) as total_products FROM shopping_carts 
+	query := `SELECT SUM(qty) as total_products FROM shopping_carts 
 		WHERE user_id = (SELECT id FROM users WHERE token=$1)`
 
 	err := c.DB.QueryRow(query, token).Scan(&totalProduct)
@@ -40,12 +40,12 @@ func (c *CartsRepository) GetDetailCart(token string) (*[]model.Products, error)
 
 	carts := []model.Products{}
 
-	query := `SELECT p.name, p.image_url, p.price, p.discount, SUM(c.qty) FROM shopping_carts c
+	query := `SELECT p.name, pv.image_url, p.price, p.discount, SUM(c.qty) FROM shopping_carts c
 		JOIN product_varians pv ON c.product_variant_id = pv.id
 		JOIN products p ON pv.product_id = p.id
 		JOIN users u ON c.user_id = u.id
 		WHERE pv.product_id = p.id AND u.token = $1 AND c.deleted_at IS NULL
-		GROUP BY p.name, p.image_url, p.price, p.discount`
+		GROUP BY p.name, pv.image_url, p.price, p.discount`
 
 	rows, err := c.DB.Query(query, token)
 	if err != nil {
@@ -105,21 +105,14 @@ func (c *CartsRepository) GetUserID(token string) (int, error) {
 	return userID, err
 }
 
-func (c *CartsRepository) UpdateCart(token string, product *model.Products) error {
-	today := time.Now()
-
-	userID, err := c.GetUserID(token)
-	if err != nil {
-		c.Logger.Error("Error For Getting User ID: " + err.Error())
-		return err
-	}
+func (c *CartsRepository) UpdateCart(token string, id int, product *model.Products) error {
 
 	query := `
 		UPDATE shopping_carts 
-		SET qty = $1, updated_at = $2
-		WHERE product_variant_id = $3 AND user_id = $4 AND deleted_at IS NULL
+		SET qty = $1, updated_at = NOW()
+		WHERE product_variant_id = $2 AND user_id = (SELECT id FROM users WHERE token=$3) AND deleted_at IS NULL
 	`
-	result, err := c.DB.Exec(query, product.Qty, today, product.ID, userID)
+	result, err := c.DB.Exec(query, product.Qty, id, token)
 	if err != nil {
 		c.Logger.Error("Error updating cart: " + err.Error())
 		return err

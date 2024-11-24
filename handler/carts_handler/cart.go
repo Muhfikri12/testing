@@ -73,6 +73,8 @@ func (ch *CartsHandler) AddItemToCart(w http.ResponseWriter, r *http.Request) {
 func (ch *CartsHandler) UpdateCart(w http.ResponseWriter, r *http.Request) {
 
 	token := r.Header.Get("Authorization")
+	idSrt := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(idSrt)
 	product := model.Products{}
 
 	err := json.NewDecoder(r.Body).Decode(&product)
@@ -81,7 +83,7 @@ func (ch *CartsHandler) UpdateCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := ch.Service.CartService.UpdateCart(token, &product); err != nil {
+	if err := ch.Service.CartService.UpdateCart(token, id, &product); err != nil {
 		ch.Log.Error("Failed to Update Qty: " + err.Error())
 		helper.Responses(w, http.StatusNotFound, "Product not found", nil)
 		return
