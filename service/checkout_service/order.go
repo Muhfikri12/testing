@@ -1,12 +1,14 @@
 package checkoutservice
 
-func (cs *CheckoutsService) CreateOrder(token string) error {
+import "ecommers/model"
 
-	err := cs.Repo.CheckoutRepo.ProcessCheckout(token)
+func (cs *CheckoutsService) CreateOrder(token string) (*model.Checkouts, error) {
+
+	checkout, err := cs.Repo.CheckoutRepo.ProcessCheckout(token)
 	if err != nil {
 		cs.Logger.Error("Error from service CreateOrder: " + err.Error())
-		return err
+		return nil, err
 	}
 
-	return nil
+	return checkout, nil
 }

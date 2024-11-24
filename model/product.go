@@ -12,6 +12,8 @@ type Products struct {
 	Qty                int         `json:"qty,omitempty"`
 	Description        string      `json:"description,omitempty"`
 	Status             string      `json:"status,omitempty"`
+	Size               string      `json:"size,omitempty"`
+	Color              string      `json:"color,omitempty"`
 	Variants           *[]Variant  `json:"variants,omitempty"`
 	Categories         *Categories `json:"categories,omitempty"`
 	Previews           *Previews   `json:"previews,omitempty"`
