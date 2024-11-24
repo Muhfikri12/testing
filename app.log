@@ -1,2 +1,7 @@
-{"L":"INFO","T":"2024-11-24T10:25:45.584+0700","M":"Starting server","port":"8000"}
-{"L":"INFO","T":"2024-11-24T10:25:56.280+0700","M":"http request","url":"/api/carts","duration":"35.837003ms"}
+{"L":"INFO","T":"2024-11-24T10:57:44.069+0700","M":"Starting server","port":"8000"}
+{"L":"ERROR","T":"2024-11-24T10:58:01.249+0700","M":"Token expired"}
+{"L":"INFO","T":"2024-11-24T10:58:01.250+0700","M":"http request","url":"/api/carts/4","duration":"42.803965ms"}
+{"L":"INFO","T":"2024-11-24T10:58:08.890+0700","M":"http request","url":"/api/login","duration":"22.65839ms"}
+{"L":"INFO","T":"2024-11-24T10:58:15.970+0700","M":"http request","url":"/api/carts/4","duration":"16.8116ms"}
+{"L":"INFO","T":"2024-11-24T10:58:54.566+0700","M":"http request","url":"/api/carts/4","duration":"20.673097ms"}
+{"L":"INFO","T":"2024-11-24T10:59:07.971+0700","M":"http request","url":"/api/carts/4","duration":"13.577138ms"}

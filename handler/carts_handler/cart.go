@@ -7,7 +7,9 @@ import (
 	"ecommers/util"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
 )
 
@@ -56,21 +58,16 @@ func (ch *CartsHandler) GetDetailCart(w http.ResponseWriter, r *http.Request) {
 func (ch *CartsHandler) AddItemToCart(w http.ResponseWriter, r *http.Request) {
 
 	token := r.Header.Get("Authorization")
-	product := model.Products{}
+	idSrt := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(idSrt)
 
-	err := json.NewDecoder(r.Body).Decode(&product)
-	if err != nil {
-		ch.Log.Error("Error from Decode AddItemToCart: " + err.Error())
-		return
-	}
-
-	if err := ch.Service.CartService.AddItemToCart(token, &product); err != nil {
+	if err := ch.Service.CartService.AddItemToCart(token, id); err != nil {
 		ch.Log.Error("Failed to Insert Product to cart: " + err.Error())
 		helper.Responses(w, http.StatusInternalServerError, "failed to insert product to cart", nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusCreated, "Successfully Insert to cart", product)
+	helper.Responses(w, http.StatusCreated, "Successfully Insert to cart", nil)
 }
 
 func (ch *CartsHandler) UpdateCart(w http.ResponseWriter, r *http.Request) {

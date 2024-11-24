@@ -70,24 +70,16 @@ func (c *CartsRepository) GetDetailCart(token string) (*[]model.Products, error)
 	return &carts, nil
 }
 
-func (c *CartsRepository) AddItemToCart(token string, cart *model.Products) error {
-
-	userID, err := c.GetUserID(token)
-	if err != nil {
-		c.Logger.Error("Error For Getting id User: " + err.Error())
-		return err
-	}
-
-	today := time.Now()
+func (c *CartsRepository) AddItemToCart(token string, id int) error {
 
 	queryAddToCart := `
 		INSERT INTO shopping_carts (product_variant_id, user_id, qty, created_at, updated_at) 
-		VALUES ($1, $2, 1, $3, $4)
+		VALUES ($1, (SELECT id FROM users WHERE token=$2), 1, NOW(), NOW())
 		ON CONFLICT (product_variant_id, user_id) 
-		DO UPDATE SET qty = shopping_carts.qty + 1, updated_at = $5
+		DO UPDATE SET qty = shopping_carts.qty + 1, updated_at = NOW()
 		WHERE shopping_carts.deleted_at IS NULL
 	`
-	_, err = c.DB.Exec(queryAddToCart, cart.ID, userID, today, today, today)
+	_, err := c.DB.Exec(queryAddToCart, id, token)
 	if err != nil {
 		c.Logger.Error("Error For input or update database: " + err.Error())
 		return err

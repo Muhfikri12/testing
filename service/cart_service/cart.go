@@ -40,9 +40,9 @@ func (cs *CartsService) GetDetailCart(token string) (*[]model.Products, error) {
 	return products, nil
 }
 
-func (cs *CartsService) AddItemToCart(token string, cart *model.Products) error {
+func (cs *CartsService) AddItemToCart(token string, id int) error {
 
-	err := cs.Repo.CartRepo.AddItemToCart(token, cart)
+	err := cs.Repo.CartRepo.AddItemToCart(token, id)
 	if err != nil {
 		cs.Logger.Error("Error from service AddItemToCart: " + err.Error())
 		return err
