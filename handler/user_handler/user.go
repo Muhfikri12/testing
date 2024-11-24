@@ -77,7 +77,7 @@ func (uh *UserHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
 	err = uh.Service.UserService.UpdateUserData(token, &User)
 	if err != nil {
 		uh.Log.Error("Failed to update Data: " + err.Error())
-		helper.Responses(w, http.StatusInternalServerError, "Failed to update Data: ", nil)
+		helper.Responses(w, http.StatusInternalServerError, "Failed to update Data: "+err.Error(), nil)
 		return
 	}
 

@@ -8,7 +8,6 @@ type Users struct {
 	Email           string     `json:"email,omitempty" validate:"required,email"`
 	Phone           string     `json:"phone,omitempty" validate:"required,min=10,alphanum"`
 	Token           string     `json:"token,omitempty"`
-	Password        string     `json:"password,omitempty" validate:"required"`
 	CurrentPassword *string    `json:"current_password,omitempty"`
 	NewPassword     string     `json:"new_password,omitempty"`
 	ConfirmPassword string     `json:"confirm_password,omitempty" validate:"eqfield=NewPassword"`
@@ -24,5 +23,14 @@ type Login struct {
 type Addresses struct {
 	ID      uint   `json:"id,omitempty"`
 	Address string `json:"address,omitempty" validate:"required"`
-	Status  string `json:"status,omitempty" validate:"required"`
+	Status  string `json:"status,omitempty"`
+}
+
+type Register struct {
+	ID       uint   `json:"id,omitempty"`
+	Name     string `json:"name,omitempty" validate:"required"`
+	Username string `json:"username,omitempty"`
+	Email    string `json:"email,omitempty" validate:"required,email"`
+	Phone    string `json:"phone,omitempty" validate:"required,min=10,alphanum"`
+	Password string `json:"password,omitempty" validate:"required"`
 }

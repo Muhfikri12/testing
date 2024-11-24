@@ -13,9 +13,9 @@ func (u *UsersService) AddAddress(token string, address *model.Addresses) error 
 	return nil
 }
 
-func (u *UsersService) UpdateAddress(token string, address *model.Addresses) error {
+func (u *UsersService) UpdateAddress(token string, id int, address *model.Addresses) error {
 
-	err := u.Repo.UsersRepo.UpdateAddress(token, address)
+	err := u.Repo.UsersRepo.UpdateAddress(token, id, address)
 	if err != nil {
 		u.Logger.Error("Error from service UpdateAddress: " + err.Error())
 		return err

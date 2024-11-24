@@ -26,13 +26,13 @@ func (u *UsersRepository) AddAddress(token string, address *model.Addresses) err
 	return nil
 }
 
-func (u *UsersRepository) UpdateAddress(token string, address *model.Addresses) error {
+func (u *UsersRepository) UpdateAddress(token string, id int, address *model.Addresses) error {
 
 	query := `UPDATE addresses 
               SET address=$1, updated_at=NOW() 
-              WHERE id = $2 AND user_id = (SELECT id FROM users WHERE token = $3)`
+              WHERE id = $2 AND user_id = (SELECT id FROM users WH	ERE token = $3)`
 
-	_, err := u.DB.Exec(query, address.Address, address.ID, token)
+	_, err := u.DB.Exec(query, address.Address, id, token)
 	if err != nil {
 		u.Logger.Error("Error updating address: " + err.Error())
 		return err
@@ -46,10 +46,21 @@ func (u *UsersRepository) DeleteAddress(token string, id int) error {
 	query := `DELETE FROM addresses 
 	WHERE user_id = (SELECT id FROM users WHERE token = $1) AND id=$2`
 
-	_, err := u.DB.Exec(query, token, id)
+	result, err := u.DB.Exec(query, token, id)
 	if err != nil {
 		u.Logger.Error("Error updating address: " + err.Error())
 		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		u.Logger.Error("Error fetching rows affected: " + err.Error())
+		return fmt.Errorf("failed to fetch rows affected")
+	}
+
+	if rowsAffected == 0 {
+		u.Logger.Debug("No Address entry found to delete")
+		return fmt.Errorf("no matching Address entry found")
 	}
 
 	return nil
@@ -58,6 +69,7 @@ func (u *UsersRepository) DeleteAddress(token string, id int) error {
 func (u *UsersRepository) SetDefault(token string, id int) error {
 
 	tx, err := u.DB.Begin()
+
 	if err != nil {
 		u.Logger.Error("Error starting transaction: " + err.Error())
 		return err

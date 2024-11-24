@@ -10,7 +10,7 @@ import (
 )
 
 func (u *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
-	user := model.Users{}
+	user := model.Register{}
 	validate := validator.New()
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {

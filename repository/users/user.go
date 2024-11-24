@@ -77,7 +77,7 @@ func (u *UsersRepository) UpdateUserData(token string, user *model.Users) error 
 	}
 
 	if user.CurrentPassword != nil && user.NewPassword != "" {
-		// Ambil password yang ada di database
+
 		var currentPassword string
 		query = `SELECT password FROM users WHERE token = $1`
 		err = trx.QueryRow(query, token).Scan(&currentPassword)
@@ -96,7 +96,6 @@ func (u *UsersRepository) UpdateUserData(token string, user *model.Users) error 
 			return fmt.Errorf("new password must be at least 8 characters")
 		}
 
-		// Update password jika valid
 		query = `UPDATE users SET password = $1, updated_at = NOW() WHERE token = $2`
 		_, err = trx.Exec(query, user.NewPassword, token)
 		if err != nil {
@@ -104,7 +103,7 @@ func (u *UsersRepository) UpdateUserData(token string, user *model.Users) error 
 			return err
 		}
 	} else if user.NewPassword != "" {
-		// Password baru tidak boleh kosong tanpa password lama
+
 		u.Logger.Error("Current password is required to update the password")
 		return fmt.Errorf("current password is required to update the password")
 	}

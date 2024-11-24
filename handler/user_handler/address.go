@@ -42,6 +42,10 @@ func (uh *UserHandler) AddAddress(w http.ResponseWriter, r *http.Request) {
 
 func (uh *UserHandler) UpdateAddress(w http.ResponseWriter, r *http.Request) {
 
+	idStr := chi.URLParam(r, "id")
+
+	id, _ := strconv.Atoi(idStr)
+
 	validate := validator.New()
 	token := r.Header.Get("Authorization")
 	address := model.Addresses{}
@@ -59,7 +63,7 @@ func (uh *UserHandler) UpdateAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = uh.Service.UserService.UpdateAddress(token, &address)
+	err = uh.Service.UserService.UpdateAddress(token, id, &address)
 	if err != nil {
 		uh.Log.Error("Failed to update address: " + err.Error())
 		helper.Responses(w, http.StatusInternalServerError, "Failed to update address", nil)
@@ -80,7 +84,7 @@ func (uh *UserHandler) DeleteAddress(w http.ResponseWriter, r *http.Request) {
 	err := uh.Service.UserService.DeleteAddress(token, id)
 	if err != nil {
 		uh.Log.Error("Failed to delete address: " + err.Error())
-		helper.Responses(w, http.StatusInternalServerError, "Failed to update address", nil)
+		helper.Responses(w, http.StatusNotFound, err.Error(), nil)
 		return
 	}
 
