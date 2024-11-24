@@ -1,7 +1,2 @@
-{"L":"INFO","T":"2024-11-24T10:14:41.664+0700","M":"Starting server","port":"8000"}
-{"L":"DEBUG","T":"2024-11-24T10:14:51.517+0700","M":"No wishlist entry found to delete"}
-{"L":"ERROR","T":"2024-11-24T10:14:51.518+0700","M":"Error from Service: no matching wishlist entry found"}
-{"L":"ERROR","T":"2024-11-24T10:14:51.518+0700","M":"event handler:no matching wishlist entry found"}
-{"L":"INFO","T":"2024-11-24T10:14:51.518+0700","M":"http request","url":"/api/wishlists/10","duration":"51.934275ms"}
-{"L":"INFO","T":"2024-11-24T10:15:02.967+0700","M":"http request","url":"/api/wishlists/4","duration":"13.611424ms"}
-{"L":"INFO","T":"2024-11-24T10:17:09.986+0700","M":"http request","url":"/api/carts","duration":"35.38144ms"}
+{"L":"INFO","T":"2024-11-24T10:25:45.584+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-24T10:25:56.280+0700","M":"http request","url":"/api/carts","duration":"35.837003ms"}

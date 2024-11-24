@@ -21,33 +21,19 @@ func NewCartsRepository(db *sql.DB, Log *zap.Logger) CartsRepository {
 	}
 }
 
-func (c *CartsRepository) TotalCarts(token string) (*[]model.Cart, error) {
+func (c *CartsRepository) TotalCarts(token string) (int, error) {
 
-	query := `SELECT COUNT(c.id) as total_products FROM shopping_carts c
-		LEFT JOIN users u ON c.user_id = u.id
-		WHERE c.deleted_at IS NULL AND u.token = $1
-		GROUP BY u.id`
+	var totalProduct int
+	query := `SELECT COUNT(id) as total_products FROM shopping_carts 
+		WHERE user_id = (SELECT id FROM users WHERE token=$1)`
 
-	rows, err := c.DB.Query(query, token)
+	err := c.DB.QueryRow(query, token).Scan(&totalProduct)
 	if err != nil {
 		c.Logger.Error("Error from repository: " + err.Error())
-		return nil, err
-	}
-	defer rows.Close()
-
-	carts := []model.Cart{}
-
-	for rows.Next() {
-		cart := model.Cart{}
-		if err := rows.Scan(&cart.UserID, &cart.TotalProducts); err != nil {
-			c.Logger.Error("Error from repository: " + err.Error())
-			return nil, err
-		}
-
-		carts = append(carts, cart)
+		return 0, err
 	}
 
-	return &carts, nil
+	return totalProduct, nil
 }
 
 func (c *CartsRepository) GetDetailCart(token string) (*[]model.Products, error) {

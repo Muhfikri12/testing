@@ -19,15 +19,15 @@ func NewCartsService(repo repository.AllRepository, Log *zap.Logger) CartsServic
 	}
 }
 
-func (cs *CartsService) TotalProducts(token string) (*[]model.Cart, error) {
+func (cs *CartsService) TotalProducts(token string) (int, error) {
 
-	carts, err := cs.Repo.CartRepo.TotalCarts(token)
+	totalProduct, err := cs.Repo.CartRepo.TotalCarts(token)
 	if err != nil {
 		cs.Logger.Error("Error from service: " + err.Error())
-		return nil, err
+		return 0, err
 	}
 
-	return carts, nil
+	return totalProduct, nil
 }
 
 func (cs *CartsService) GetDetailCart(token string) (*[]model.Products, error) {

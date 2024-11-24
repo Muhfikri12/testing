@@ -29,14 +29,14 @@ func (ch *CartsHandler) AllProductsCart(w http.ResponseWriter, r *http.Request) 
 
 	token := r.Header.Get("Authorization")
 
-	carts, err := ch.Service.CartService.TotalProducts(token)
+	totalProduct, err := ch.Service.CartService.TotalProducts(token)
 	if err != nil {
 		ch.Log.Error("Failed to Get total product cart: " + err.Error())
 		helper.Responses(w, http.StatusInternalServerError, "Failed to Get total product cart: "+err.Error(), nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Succesfully", carts)
+	helper.Responses(w, http.StatusOK, "Succesfully", totalProduct)
 }
 
 func (ch *CartsHandler) GetDetailCart(w http.ResponseWriter, r *http.Request) {
