@@ -22,15 +22,22 @@ func NewUsersRepository(db *sql.DB, Log *zap.Logger) UsersRepository {
 
 func (u *UsersRepository) GetDetailUser(token string) (*model.Users, error) {
 
-	user := model.Users{}
-	query := `SELECT u.id, u.name, u.email, a.address, u.phone
+	user := model.Users{
+		Address: &model.Addresses{},
+	}
+	var isMain bool
+	query := `SELECT u.id, u.name, u.email, a.address, a.is_main, u.phone
 		FROM users u
 		JOIN addresses a ON a.user_id = u.id
-		WHERE u.token = $1`
+		WHERE u.token = $1 AND is_main = true`
 
-	if err := u.DB.QueryRow(query, token).Scan(&user.ID, &user.Name, &user.Email, &user.Address, &user.Phone); err != nil {
+	if err := u.DB.QueryRow(query, token).Scan(&user.ID, &user.Name, &user.Email, &user.Address.Address, &isMain, &user.Phone); err != nil {
 		u.Logger.Error("Error from query GetDetailUser: " + err.Error())
 		return nil, err
+	}
+
+	if isMain {
+		user.Address.Status = "default"
 	}
 
 	return &user, nil

@@ -1,27 +1,2 @@
-{"L":"INFO","T":"2024-11-24T17:22:15.082+0700","M":"Starting server","port":"8000"}
-{"L":"ERROR","T":"2024-11-24T17:22:29.245+0700","M":"Error from service CreateOrder: shopping cart is empty"}
-{"L":"ERROR","T":"2024-11-24T17:22:29.245+0700","M":"Product not found: shopping cart is empty"}
-{"L":"INFO","T":"2024-11-24T17:22:29.245+0700","M":"http request","url":"/api/order","duration":"52.263919ms"}
-{"L":"INFO","T":"2024-11-24T17:22:48.538+0700","M":"http request","url":"/api/carts/5","duration":"22.346167ms"}
-{"L":"WARN","T":"2024-11-24T17:23:04.389+0700","M":"No cart item deleted, possibly already soft deleted or not found"}
-{"L":"ERROR","T":"2024-11-24T17:23:04.389+0700","M":"Error from service UpdateCart: item not found or already deleted"}
-{"L":"ERROR","T":"2024-11-24T17:23:04.389+0700","M":"Failed to Update Qty: item not found or already deleted"}
-{"L":"INFO","T":"2024-11-24T17:23:04.389+0700","M":"http request","url":"/api/carts/4","duration":"9.883543ms"}
-{"L":"INFO","T":"2024-11-24T17:23:09.210+0700","M":"http request","url":"/api/carts/5","duration":"10.160533ms"}
-{"L":"INFO","T":"2024-11-24T17:23:32.217+0700","M":"http request","url":"/api/products","duration":"7.594927ms"}
-{"L":"INFO","T":"2024-11-24T17:24:20.706+0700","M":"http request","url":"/api/product/5","duration":"2.898655ms"}
-{"L":"ERROR","T":"2024-11-24T17:25:44.997+0700","M":"Error from service CreateOrder: pq: operator does not exist: character varying - unknown"}
-{"L":"ERROR","T":"2024-11-24T17:25:44.998+0700","M":"Product not found: pq: operator does not exist: character varying - unknown"}
-{"L":"INFO","T":"2024-11-24T17:25:44.998+0700","M":"http request","url":"/api/order","duration":"26.815983ms"}
-{"L":"ERROR","T":"2024-11-24T17:31:26.445+0700","M":"Token expired"}
-{"L":"INFO","T":"2024-11-24T17:31:26.447+0700","M":"http request","url":"/api/order","duration":"20.26541ms"}
-{"L":"INFO","T":"2024-11-24T17:31:37.604+0700","M":"http request","url":"/api/login","duration":"15.25537ms"}
-{"L":"ERROR","T":"2024-11-24T17:31:46.900+0700","M":"Error from service CreateOrder: pq: operator does not exist: character varying - unknown"}
-{"L":"ERROR","T":"2024-11-24T17:31:46.900+0700","M":"Product not found: pq: operator does not exist: character varying - unknown"}
-{"L":"INFO","T":"2024-11-24T17:31:46.900+0700","M":"http request","url":"/api/order","duration":"16.719792ms"}
-{"L":"INFO","T":"2024-11-24T17:43:39.663+0700","M":"http request","url":"/api/order","duration":"34.653751ms"}
-{"L":"INFO","T":"2024-11-24T17:48:36.061+0700","M":"http request","url":"/api/carts/2","duration":"11.164736ms"}
-{"L":"INFO","T":"2024-11-24T17:48:41.988+0700","M":"http request","url":"/api/carts/3","duration":"10.169132ms"}
-{"L":"INFO","T":"2024-11-24T17:48:56.037+0700","M":"http request","url":"/api/carts/2","duration":"16.22556ms"}
-{"L":"INFO","T":"2024-11-24T17:49:03.672+0700","M":"http request","url":"/api/carts/3","duration":"11.827155ms"}
-{"L":"INFO","T":"2024-11-24T17:49:36.027+0700","M":"http request","url":"/api/order","duration":"17.222749ms"}
+{"L":"INFO","T":"2024-11-24T18:04:04.706+0700","M":"Starting server","port":"8000"}
+{"L":"INFO","T":"2024-11-24T18:04:15.970+0700","M":"http request","url":"/api/users/detail","duration":"80.413258ms"}
