@@ -1,7 +1,7 @@
 package model
 
 type Users struct {
-	ID              uint       `json:"id,omitempty"`
+	ID              int        `json:"id,omitempty"`
 	Name            string     `json:"name,omitempty" validate:"required"`
 	Username        string     `json:"username,omitempty"`
 	Address         *Addresses `json:"addresses,omitempty"`

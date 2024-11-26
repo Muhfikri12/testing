@@ -8,13 +8,23 @@ import (
 	"go.uber.org/zap"
 )
 
+type UsersRepoInterface interface {
+	GetDetailUser(token string) (*model.Users, error)
+	UpdateUserData(token string, user *model.Users) error
+	AddAddress(token string, address *model.Addresses) error
+	UpdateAddress(token string, id int, address *model.Addresses) error
+	DeleteAddress(token string, id int) error
+	SetDefault(token string, id int) error
+	GetListAddress(token string) (*[]model.Addresses, error)
+}
+
 type UsersRepository struct {
 	DB     *sql.DB
 	Logger *zap.Logger
 }
 
-func NewUsersRepository(db *sql.DB, Log *zap.Logger) UsersRepository {
-	return UsersRepository{
+func NewUsersRepository(db *sql.DB, Log *zap.Logger) UsersRepoInterface {
+	return &UsersRepository{
 		DB:     db,
 		Logger: Log,
 	}

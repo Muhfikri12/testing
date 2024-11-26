@@ -17,10 +17,10 @@ type AllRepository struct {
 	ProductsRepo  products.ProductRepository
 	CategoryRepo  category.CategoryRepository
 	PromotionRepo promotions.PromotionsRepository
-	UsersRepo     users.UsersRepository
+	UsersRepo     users.UsersRepoInterface
 	CartRepo      carts.CartsRepository
 	CheckoutRepo  checkout.CheckoutsRepository
-	AuthRepo      auth.AuthRepository
+	AuthRepo      auth.AuthRepositoryInterface
 }
 
 func NewAllRepository(db *sql.DB, log *zap.Logger) AllRepository {

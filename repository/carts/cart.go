@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"ecommers/model"
 	"errors"
-	"fmt"
 
 	"go.uber.org/zap"
 )
@@ -71,12 +70,6 @@ func (c *CartsRepository) GetDetailCart(token string) (*[]model.Products, error)
 }
 
 func (c *CartsRepository) AddItemToCart(token string, id int) error {
-	queryCheckProduct := `SELECT id FROM product_varians WHERE id=$1`
-
-	if err := c.DB.QueryRow(queryCheckProduct, id).Scan(&id); err != nil {
-		c.Logger.Error("Product not found" + err.Error())
-		return fmt.Errorf("product not found")
-	}
 
 	queryAddToCart := `
 		INSERT INTO shopping_carts (product_variant_id, user_id, qty, created_at, updated_at) 
