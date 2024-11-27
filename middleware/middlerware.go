@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
@@ -17,15 +17,22 @@ func NewMiddleware(log *zap.Logger) Middleware {
 	}
 }
 
-func (middleware *Middleware) MinddlewareLogger(handler http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func (middleware *Middleware) MiddlewareLogger() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		start := time.Now()
 
-		handler.ServeHTTP(w, r)
+		// Proses request ke handler berikutnya
+		c.Next()
 
+		// Menghitung durasi request
 		duration := time.Since(start)
 
-		middleware.Log.Info("http request", zap.String("url", r.URL.String()), zap.Duration("duration", duration))
-	})
-
+		// Logging informasi request
+		middleware.Log.Info("http request",
+			zap.String("url", c.Request.URL.String()),
+			zap.String("method", c.Request.Method),
+			zap.Int("status", c.Writer.Status()),
+			zap.Duration("duration", duration),
+		)
+	}
 }

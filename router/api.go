@@ -31,8 +31,6 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 		return nil, logger, err
 	}
 
-	md := middleware.NewMiddleware(logger)
-
 	// Authentication
 	auth := middleware.NewAuthHandler(logger)
 
@@ -42,7 +40,6 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 
 	r.Route("/api", func(api chi.Router) {
 
-		api.Use(md.MinddlewareLogger)
 		api.Route("/products", func(r chi.Router) {
 			r.Get("/", handler.ProductHandler.GetAll)
 			r.Get("/best_selling", handler.ProductHandler.GetAllBestSelling)
@@ -75,11 +72,6 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 			r.Patch("/address/set/{id}", handler.UserHandler.SetDefault)
 		})
 
-		api.Route("/order", func(r chi.Router) {
-			r.Use(auth.AuthenticateToken)
-			r.Post("/", handler.Checkouthandler.CreateOrder)
-		})
-
 		api.Post("/login", handler.AuthHandler.Login)
 		api.Post("/register", handler.AuthHandler.Register)
 		api.Get("/categories", handler.CategoryHandler.GetAllCategories)
@@ -93,48 +85,49 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 	return r, logger, nil
 }
 
-// InitGin initializes the Gin application
 func InitGin() (*gin.Engine, *zap.Logger, error) {
-	// Initialize Logger
+
 	logger := util.InitLog()
 
-	// Load Configuration
 	config, err := util.ReadConfiguration()
 	if err != nil {
 		logger.Error("Failed to read configuration", zap.Error(err))
 		return nil, logger, err
 	}
 
-	// Initialize Database
 	db, err := database.InitDB(config)
 	if err != nil {
 		logger.Error("Failed to initialize database", zap.Error(err))
 		return nil, logger, err
 	}
 
-	// Initialize Authentication Middleware
 	auth := middleware.NewAuthHandler(logger)
 
-	// Initialize Repository, Service, and Handlers
 	repo := repository.NewAllRepository(db, logger)
 	service := service.NewAllService(repo, logger)
 	allHandler := handler.NewAllHandler(service, logger, config)
 
-	// Create Gin Router
+	md := middleware.NewMiddleware(logger)
+
 	router := gin.Default()
+	router.Use(md.MiddlewareLogger())
 
 	router.POST("/login", allHandler.AuthHandler.LoginGin)
 
-	authorized := router.Group("/")
+	authorized := router.Group("/api")
 	authorized.Use(auth.AuthenticateGin())
 	{
 		authorized.GET("/checkouts", allHandler.Checkouthandler.GetDetailCheckoutGin)
 	}
 
-	cart := router.Group("/carts")
-	cart.Use(auth.AuthenticateGin())
+	cart := authorized.Group("/carts")
 	{
 		cart.POST("/:id", allHandler.CartHandler.AddItemToCart)
+	}
+
+	order := authorized.Group("/order")
+	{
+		order.POST("/", allHandler.Checkouthandler.CreateOrder)
 	}
 
 	// Return the configured router and logger

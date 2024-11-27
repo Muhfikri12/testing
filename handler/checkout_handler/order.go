@@ -3,18 +3,20 @@ package checkouthandler
 import (
 	"ecommers/helper"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-func (ch *CheckoutsHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
+func (ch *CheckoutsHandler) CreateOrder(c *gin.Context) {
 
-	token := r.Header.Get("Authorization")
+	token := c.GetHeader("Authorization")
 
 	checkout, err := ch.Service.CheckoutService.CreateOrder(token)
 	if err != nil {
 		ch.Log.Error("Product not found: " + err.Error())
-		helper.Responses(w, http.StatusNotFound, "Product not found: "+err.Error(), nil)
+		helper.ResponsesJson(c, http.StatusNotFound, "Product not found", nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Succesfully", checkout)
+	helper.ResponsesJson(c, http.StatusOK, "Data retrieved successfully", checkout)
 }
