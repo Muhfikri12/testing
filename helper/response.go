@@ -3,6 +3,8 @@ package helper
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Response struct {
@@ -42,4 +44,15 @@ func SuccessWithPage(w http.ResponseWriter, statusCode, page, limit, totalPage, 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	json.NewEncoder(w).Encode(response)
+}
+
+func ResponsesJson(c *gin.Context, status int, message string, data any) {
+
+	Response := Response{
+		Status:  status,
+		Message: message,
+		Data:    data,
+	}
+
+	c.JSON(status, Response)
 }

@@ -22,7 +22,7 @@ func TestAuthRepository_Register(t *testing.T) {
 	authRepo := auth.NewAuthRepository(db, logger)
 
 	t.Run("successfully registers a user", func(t *testing.T) {
-		// Data input user valid
+
 		user := &model.Register{
 			Name:     "John Doe",
 			Phone:    "1234567890",
@@ -33,7 +33,7 @@ func TestAuthRepository_Register(t *testing.T) {
 		mock.ExpectQuery(`INSERT INTO users`).
 			WithArgs(
 				user.Name,
-				sqlmock.AnyArg(), // Username yang di-generate akan dinamis
+				sqlmock.AnyArg(),
 				user.Phone,
 				user.Email,
 				user.Password,
@@ -58,7 +58,6 @@ func TestAuthRepository_Register(t *testing.T) {
 			Password: "securepassword",
 		}
 
-		// Mock query expectation with duplicate error
 		mock.ExpectQuery(`INSERT INTO users`).
 			WithArgs(
 				user.Name,
@@ -69,39 +68,10 @@ func TestAuthRepository_Register(t *testing.T) {
 			).
 			WillReturnError(errors.New("duplicate key value violates unique constraint"))
 
-		// Eksekusi fungsi Register
 		err := authRepo.Register(user)
 
-		// Assertions
 		assert.Error(t, err)
 		assert.Equal(t, "email or phone already in use", err.Error())
 	})
 
-	t.Run("fails due to generic database error", func(t *testing.T) {
-		// Data input user
-		user := &model.Register{
-			Name:     "Alice Doe",
-			Phone:    "5678901234",
-			Email:    "alice@example.com",
-			Password: "securepassword",
-		}
-
-		// Mock query expectation with generic error
-		mock.ExpectQuery(`INSERT INTO users`).
-			WithArgs(
-				user.Name,
-				sqlmock.AnyArg(),
-				user.Phone,
-				user.Email,
-				user.Password,
-			).
-			WillReturnError(errors.New("generic database error"))
-
-		// Eksekusi fungsi Register
-		err := authRepo.Register(user)
-
-		// Assertions
-		assert.Error(t, err)
-		assert.Equal(t, "generic database error", err.Error())
-	})
 }

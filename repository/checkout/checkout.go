@@ -21,15 +21,17 @@ func NewCheckoutsRepository(db *sql.DB, Log *zap.Logger) CheckoutsRepository {
 
 func (c *CheckoutsRepository) GetDetailCheckout(token string) (*model.Checkouts, error) {
 
-	User := model.Users{}
+	User := model.Users{
+		Address: &model.Addresses{},
+	}
 	Products := []model.Products{}
 
-	queryUser := `SELECT u.name, u.email, a.address FROM shopping_carts c
+	queryUser := `SELECT u.name, u.email, a.address, a.longlat FROM shopping_carts c
 			JOIN users u ON c.user_id = u.id
 			JOIN addresses a ON u.id = a.user_id
-			WHERE u.token = $1`
+			WHERE u.token = $1 AND a.is_main = true`
 
-	err := c.DB.QueryRow(queryUser, token).Scan(&User.Name, &User.Email, &User.Address)
+	err := c.DB.QueryRow(queryUser, token).Scan(&User.Name, &User.Email, &User.Address.Address, &User.Address.Longlat)
 	if err != nil {
 		c.Logger.Error("Error from query users GetDetailCheckout: " + err.Error())
 		return nil, err

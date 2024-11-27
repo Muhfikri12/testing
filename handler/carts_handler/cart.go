@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
 )
@@ -55,19 +56,25 @@ func (ch *CartsHandler) GetDetailCart(w http.ResponseWriter, r *http.Request) {
 	helper.Responses(w, http.StatusOK, "Succesfully", carts)
 }
 
-func (ch *CartsHandler) AddItemToCart(w http.ResponseWriter, r *http.Request) {
+func (ch *CartsHandler) AddItemToCart(c *gin.Context) {
 
-	token := r.Header.Get("Authorization")
-	idSrt := chi.URLParam(r, "id")
+	token := c.GetHeader("Authorization")
+	idSrt := c.Param("id")
 	id, _ := strconv.Atoi(idSrt)
 
 	if err := ch.Service.CartService.AddItemToCart(token, id); err != nil {
 		ch.Log.Error("Failed to Insert Product to cart: " + err.Error())
-		helper.Responses(w, http.StatusInternalServerError, "failed to insert product to cart: "+err.Error(), nil)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to add item to cart",
+			"error":   err.Error(),
+		})
 		return
 	}
 
-	helper.Responses(w, http.StatusCreated, "Successfully Insert to cart", nil)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Successfully Added item",
+		"data":    id,
+	})
 }
 
 func (ch *CartsHandler) UpdateCart(w http.ResponseWriter, r *http.Request) {
