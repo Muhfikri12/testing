@@ -77,7 +77,6 @@ func InitRouter() (*chi.Mux, *zap.Logger, error) {
 
 		api.Route("/order", func(r chi.Router) {
 			r.Use(auth.AuthenticateToken)
-			r.Get("/", handler.Checkouthandler.GetDetailCheckout)
 			r.Post("/", handler.Checkouthandler.CreateOrder)
 		})
 
