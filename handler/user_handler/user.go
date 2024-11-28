@@ -5,9 +5,9 @@ import (
 	"ecommers/model"
 	"ecommers/service"
 	"ecommers/util"
-	"encoding/json"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 )
@@ -26,61 +26,61 @@ func NewUserHandler(service service.AllService, log *zap.Logger, config util.Con
 	}
 }
 
-func (uh *UserHandler) GetListAddress(w http.ResponseWriter, r *http.Request) {
+func (uh *UserHandler) GetListAddress(c *gin.Context) {
 
-	token := r.Header.Get("Authorization")
+	token := c.GetHeader("Authorization")
 
 	Addresses, err := uh.Service.UserService.GetListAddress(token)
 	if err != nil {
 		uh.Log.Error("Data not found: " + err.Error())
-		helper.Responses(w, http.StatusNotFound, "Data not found", nil)
+		helper.ResponsesJson(c, http.StatusNotFound, "Data not found", nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Succesfully Get Data", Addresses)
+	helper.ResponsesJson(c, http.StatusOK, "Succesfully Get Data", Addresses)
 }
 
-func (uh *UserHandler) GetDetailUser(w http.ResponseWriter, r *http.Request) {
+func (uh *UserHandler) GetDetailUser(c *gin.Context) {
 
-	token := r.Header.Get("Authorization")
+	token := c.GetHeader("Authorization")
 
 	users, err := uh.Service.UserService.GetDetailUser(token)
 	if err != nil {
 		uh.Log.Error("Data not found: " + err.Error())
-		helper.Responses(w, http.StatusNotFound, "Data not found", nil)
+		helper.ResponsesJson(c, http.StatusNotFound, "Data not found", nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Succesfully Get Data", users)
+	helper.ResponsesJson(c, http.StatusOK, "Succesfully Get Data", users)
 }
 
-func (uh *UserHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
+func (uh *UserHandler) UpdateUserData(c *gin.Context) {
 
 	User := model.Users{}
 
 	validate := validator.New()
-	token := r.Header.Get("Authorization")
+	token := c.GetHeader("Authorization")
 
-	err := json.NewDecoder(r.Body).Decode(&User)
+	err := c.ShouldBindJSON(&User)
 	if err != nil {
 		uh.Log.Error("Invalid Payload Request: " + err.Error())
-		helper.Responses(w, http.StatusBadRequest, "Invalid Payload Request", nil)
+		helper.ResponsesJson(c, http.StatusBadRequest, "Invalid Payload Request", nil)
 	}
 
 	err = validate.Struct(User)
 	if err != nil {
 		errors, _ := helper.ValidateInputGeneric(User)
-		helper.Responses(w, http.StatusUnprocessableEntity, "validation failed", errors)
+		helper.ResponsesJson(c, http.StatusUnprocessableEntity, "validation failed", errors)
 		return
 	}
 
 	err = uh.Service.UserService.UpdateUserData(token, &User)
 	if err != nil {
 		uh.Log.Error("Failed to update Data: " + err.Error())
-		helper.Responses(w, http.StatusInternalServerError, "Failed to update Data: "+err.Error(), nil)
+		helper.ResponsesJson(c, http.StatusInternalServerError, "Failed to update Data: "+err.Error(), nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Successfully Update Data", User)
+	helper.ResponsesJson(c, http.StatusOK, "Successfully Update Data", User)
 
 }

@@ -5,37 +5,37 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-chi/chi/v5"
+	"github.com/gin-gonic/gin"
 )
 
-func (wh *ProductHandler) CreateWishlist(w http.ResponseWriter, r *http.Request) {
+func (wh *ProductHandler) CreateWishlist(c *gin.Context) {
 
-	token := r.Header.Get("Authorization")
-	idStr := chi.URLParam(r, "id")
+	token := c.GetHeader("Authorization")
+	idStr := c.Param("id")
 	id, _ := strconv.Atoi(idStr)
 
 	if err := wh.Service.ProductService.CreateWishlist(token, id); err != nil {
 		wh.Log.Error("Failed to create wistlist: " + err.Error())
-		helper.Responses(w, http.StatusInternalServerError, "Failed to create wishlist: "+err.Error(), nil)
+		helper.ResponsesJson(c, http.StatusInternalServerError, "Failed to create wishlist: "+err.Error(), nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusCreated, "Succsessfully", id)
+	helper.ResponsesJson(c, http.StatusCreated, "Succsessfully", id)
 
 }
 
-func (wh *ProductHandler) DeleteWishlist(w http.ResponseWriter, r *http.Request) {
+func (wh *ProductHandler) DeleteWishlist(c *gin.Context) {
 
-	idStr := chi.URLParam(r, "id")
+	idStr := c.Param("id")
 	id, _ := strconv.Atoi(idStr)
 
-	token := r.Header.Get("Authorization")
+	token := c.GetHeader("Authorization")
 
 	if err := wh.Service.ProductService.DeleteWishlist(id, token); err != nil {
 		wh.Log.Error("event handler:" + err.Error())
-		helper.Responses(w, http.StatusNotFound, err.Error(), nil)
+		helper.ResponsesJson(c, http.StatusNotFound, err.Error(), nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Succsessfully", id)
+	helper.ResponsesJson(c, http.StatusOK, "Succsessfully", id)
 }

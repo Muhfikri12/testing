@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-chi/chi/v5"
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
@@ -25,11 +25,11 @@ func NewProductsHandler(service service.AllService, log *zap.Logger, config util
 	}
 }
 
-func (ph *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+func (ph *ProductHandler) GetAll(c *gin.Context) {
 
-	pageStr := r.URL.Query().Get("page")
-	category := r.URL.Query().Get("category")
-	name := r.URL.Query().Get("name")
+	pageStr := c.Query("page")
+	category := c.Query("category")
+	name := c.Query("name")
 
 	page, _ := strconv.Atoi(pageStr)
 
@@ -40,18 +40,18 @@ func (ph *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	products, totalData, totalPage, err := ph.Service.ProductService.GetAll(page, category, name)
 	if err != nil {
 		ph.Log.Error("Error Handler Product: " + err.Error())
-		helper.Responses(w, http.StatusNotFound, "Data tidak tersedia", nil)
+		helper.ResponsesJson(c, http.StatusNotFound, "Not Found", nil)
 		return
 	}
 
-	helper.SuccessWithPage(w, http.StatusOK, page, 10, totalPage, totalData, "Successfully", products)
+	helper.SuccessWithPageGin(c, http.StatusOK, page, 10, totalPage, totalData, "Successfully", products)
 }
 
-func (ph *ProductHandler) GetAllBestSelling(w http.ResponseWriter, r *http.Request) {
+func (ph *ProductHandler) GetAllBestSelling(c *gin.Context) {
 
-	pageStr := r.URL.Query().Get("page")
-	category := r.URL.Query().Get("category")
-	name := r.URL.Query().Get("name")
+	pageStr := c.Query("page")
+	category := c.Query("category")
+	name := c.Query("name")
 
 	page, _ := strconv.Atoi(pageStr)
 
@@ -62,25 +62,27 @@ func (ph *ProductHandler) GetAllBestSelling(w http.ResponseWriter, r *http.Reque
 	products, totalData, totalPage, err := ph.Service.ProductService.ProductsBestSelling(page, category, name)
 	if err != nil {
 		ph.Log.Error("Error Handler Product: " + err.Error())
-		helper.Responses(w, http.StatusNotFound, "Data tidak tersedia", nil)
+
+		helper.ResponsesJson(c, http.StatusNotFound, "Data tidak tersedia", nil)
 		return
 	}
 
-	helper.SuccessWithPage(w, http.StatusOK, page, 10, totalPage, totalData, "Successfully", products)
+	helper.SuccessWithPageGin(c, http.StatusOK, page, 10, totalPage, totalData, "Successfully", products)
 }
 
-func (ph *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) {
+func (ph *ProductHandler) GetProductByID(c *gin.Context) {
 
-	idStr := chi.URLParam(r, "id")
+	idStr := c.Param("id")
 
 	id, _ := strconv.Atoi(idStr)
 
 	product, err := ph.Service.ProductService.GetProductByID(id)
 	if err != nil {
 		ph.Log.Error("Error Handler Product: " + err.Error())
-		helper.Responses(w, http.StatusNotFound, "Data tidak tersedia", nil)
+
+		helper.ResponsesJson(c, http.StatusNotFound, "Data tidak tersedia", nil)
 	}
 
-	helper.Responses(w, http.StatusOK, "Successfully Get Data", product)
+	helper.ResponsesJson(c, http.StatusOK, "Successfully Get Data", product)
 
 }

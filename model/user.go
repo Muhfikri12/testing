@@ -16,8 +16,9 @@ type Users struct {
 
 type Login struct {
 	ID       uint   `json:"id,omitempty"`
-	Email    string `json:"email/phone,omitempty" validate:"required,email|alphanum"`
-	Password string `json:"password,omitempty" validate:"required"`
+	Email    string `json:"email,omitempty" binding:"required,email"`
+	Phone    string `json:"phone,omitempty" binding:"required"`
+	Password string `json:"password,omitempty" binding:"required"`
 	Token    string `json:"token,omitempty"`
 }
 

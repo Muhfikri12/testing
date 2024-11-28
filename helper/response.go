@@ -1,9 +1,6 @@
 package helper
 
 import (
-	"encoding/json"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,35 +14,6 @@ type Response struct {
 	Data      interface{} `json:"data,omitempty"`
 }
 
-func Responses(w http.ResponseWriter, code int, message string, data any) {
-	response := Response{
-		Status:  code,
-		Message: message,
-		Data:    data,
-	}
-
-	w.Header().Set("content-type", "application/json")
-	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(response)
-}
-
-func SuccessWithPage(w http.ResponseWriter, statusCode, page, limit, totalPage, totalData int, message string, data any) {
-
-	response := Response{
-		Status:    statusCode,
-		Page:      page,
-		Limit:     limit,
-		TotalData: totalData,
-		TotalPage: totalPage,
-		Message:   message,
-		Data:      data,
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(response)
-}
-
 func ResponsesJson(c *gin.Context, status int, message string, data any) {
 
 	Response := Response{
@@ -55,4 +23,19 @@ func ResponsesJson(c *gin.Context, status int, message string, data any) {
 	}
 
 	c.JSON(status, Response)
+}
+
+func SuccessWithPageGin(c *gin.Context, status, page, limit, totalPage, totalData int, message string, data any) {
+
+	response := Response{
+		Status:    status,
+		Page:      page,
+		Limit:     limit,
+		TotalData: totalData,
+		TotalPage: totalPage,
+		Message:   message,
+		Data:      data,
+	}
+
+	c.JSON(status, response)
 }

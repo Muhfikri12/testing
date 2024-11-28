@@ -6,6 +6,7 @@ import (
 	"ecommers/util"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
@@ -23,14 +24,16 @@ func NewCategoriesHandler(service service.AllService, log *zap.Logger, config ut
 	}
 }
 
-func (ch *CategoriesHandler) GetAllCategories(w http.ResponseWriter, r *http.Request) {
+func (ch *CategoriesHandler) GetAllCategories(c *gin.Context) {
 
 	categories, err := ch.Service.CategoryService.GetAllCategories()
 	if err != nil {
 		ch.Log.Error("Error Handler Product: " + err.Error())
-		helper.Responses(w, http.StatusNotFound, "Data tidak tersedia", nil)
+		helper.ResponsesJson(c, http.StatusNotFound, "Data tidak tersedia", nil)
+
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Successfully Get Data", categories)
+	helper.ResponsesJson(c, http.StatusOK, "Successfully Get Data", categories)
+
 }

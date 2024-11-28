@@ -5,12 +5,10 @@ import (
 	"ecommers/model"
 	"ecommers/service"
 	"ecommers/util"
-	"encoding/json"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
 )
 
@@ -28,32 +26,33 @@ func NewCartssHandler(service service.AllService, log *zap.Logger, config util.C
 	}
 }
 
-func (ch *CartsHandler) AllProductsCart(w http.ResponseWriter, r *http.Request) {
+func (ch *CartsHandler) AllProductsCart(c *gin.Context) {
 
-	token := r.Header.Get("Authorization")
+	token := c.GetHeader("Authorization")
 
 	totalProduct, err := ch.Service.CartService.TotalProducts(token)
 	if err != nil {
 		ch.Log.Error("Failed to Get total product cart: " + err.Error())
-		helper.Responses(w, http.StatusInternalServerError, "Failed to Get total product cart: "+err.Error(), nil)
+		helper.ResponsesJson(c, http.StatusInternalServerError, "Failed to Get total product cart: "+err.Error(), nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Succesfully", totalProduct)
+	helper.ResponsesJson(c, http.StatusOK, "Succesfully", totalProduct)
 }
 
-func (ch *CartsHandler) GetDetailCart(w http.ResponseWriter, r *http.Request) {
+func (ch *CartsHandler) GetDetailCart(c *gin.Context) {
 
-	token := r.Header.Get("Authorization")
+	token := c.GetHeader("Authorization")
 
 	carts, err := ch.Service.CartService.GetDetailCart(token)
 	if err != nil {
 		ch.Log.Error("Product not found: " + err.Error())
-		helper.Responses(w, http.StatusNotFound, "Product not found: "+err.Error(), nil)
+		helper.ResponsesJson(c, http.StatusNotFound, "Product not found: "+err.Error(), nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Succesfully", carts)
+	helper.ResponsesJson(c, http.StatusOK, "Succesfully", carts)
+
 }
 
 func (ch *CartsHandler) AddItemToCart(c *gin.Context) {
@@ -77,14 +76,14 @@ func (ch *CartsHandler) AddItemToCart(c *gin.Context) {
 	})
 }
 
-func (ch *CartsHandler) UpdateCart(w http.ResponseWriter, r *http.Request) {
+func (ch *CartsHandler) UpdateCart(c *gin.Context) {
 
-	token := r.Header.Get("Authorization")
-	idSrt := chi.URLParam(r, "id")
+	token := c.GetHeader("Authorization")
+	idSrt := c.Param("id")
 	id, _ := strconv.Atoi(idSrt)
 	product := model.Products{}
 
-	err := json.NewDecoder(r.Body).Decode(&product)
+	err := c.ShouldBindJSON(&product)
 	if err != nil {
 		ch.Log.Error("Error from Decode UpdateCart: " + err.Error())
 		return
@@ -92,25 +91,26 @@ func (ch *CartsHandler) UpdateCart(w http.ResponseWriter, r *http.Request) {
 
 	if err := ch.Service.CartService.UpdateCart(token, id, &product); err != nil {
 		ch.Log.Error("Failed to Update Qty: " + err.Error())
-		helper.Responses(w, http.StatusNotFound, "Product not found", nil)
+		helper.ResponsesJson(c, http.StatusNotFound, "Product not found", nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Successfully Update qty to cart", product)
+	helper.ResponsesJson(c, http.StatusOK, "Successfully Update qty to cart", product)
+
 }
 
-func (ch *CartsHandler) DeleteCart(w http.ResponseWriter, r *http.Request) {
+func (ch *CartsHandler) DeleteCart(c *gin.Context) {
 
-	token := r.Header.Get("Authorization")
+	token := c.GetHeader("Authorization")
 
-	idStr := chi.URLParam(r, "id")
+	idStr := c.Param("id")
 	id, _ := strconv.Atoi(idStr)
 
 	if err := ch.Service.CartService.DeleteCart(token, id); err != nil {
 		ch.Log.Error("Failed to Delete item: " + err.Error())
-		helper.Responses(w, http.StatusNotFound, "Product not found", nil)
+		helper.ResponsesJson(c, http.StatusNotFound, "Product not found", nil)
 		return
 	}
 
-	helper.Responses(w, http.StatusOK, "Successfully deleting item", nil)
+	helper.ResponsesJson(c, http.StatusOK, "Successfully deleting item", nil)
 }
